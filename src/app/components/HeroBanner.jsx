@@ -11,29 +11,22 @@ export default function HeroBanner() {
     return (
         <section className="bg-white py-16">
             <div className="container mx-auto flex flex-col md:flex-row items-center">
-                {/* Left Side: Text Content */}
                 <div className="md:w-1/2 text-center md:text-left p-4">
                     <h1 className="text-4xl font-bold mb-4">CCIP X REV3AL</h1>
                     <p className="text-lg mb-6">
                         Unlock the full potential of your tokens with cross-chain compatibility and enhanced security features. Explore seamless integration across multiple blockchains.
                     </p>
-                    {isConnected ? (
-                        <>
+                    <div className="flex justify-center md:justify-start">
+                        {isConnected ? (
                             <button className="bg-blue-600 text-white py-2 px-6 rounded-lg text-lg">
                                 Dashboard
                             </button>
-                        </>
-                    ) : (
-                        <>
-                            {/* <button className="bg-blue-600 text-white py-2 px-6 rounded-lg text-lg" onClick={open}>
-                                Start
-                            </button> */}
+                        ) : (
                             <w3m-button />
-                        </>
-                    )}
+                        )}
+                    </div>
                 </div>
 
-                {/* Right Side: Image */}
                 <div className="md:w-1/2 p-4">
                     <img
                         src={HeroImage.src}
