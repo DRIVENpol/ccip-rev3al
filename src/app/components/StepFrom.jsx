@@ -27,6 +27,7 @@ export default function StepForm() {
     const [homeChain, setHomeChain] = useState('');
     const [destinationChain, setDestinationChain] = useState('');
     const [amount, setAmount] = useState('');
+    const [nftId, setNftId] = useState('');
 
     const { isConnected } = useAccount();
 
@@ -92,15 +93,29 @@ export default function StepForm() {
                     </select>
                 </div>
 
-                {/* Step 4: Input Amount */}
+                {/* Step 4: Input Amount or ID */}
                 <div className="mb-4">
-                    <label className="block text-blue-600 text-sm font-medium mb-2">Amount</label>
-                    <input
-                        type="number"
-                        className="w-full p-2 border border-gray-300 rounded"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                    />
+                    {tokenType === 'erc20' ? (
+                        <>
+                            <label className="block text-blue-600 text-sm font-medium mb-2">Amount</label>
+                            <input
+                                type="number"
+                                className="w-full p-2 border border-gray-300 rounded"
+                                value={amount}
+                                onChange={(e) => setAmount(e.target.value)}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <label className="block text-blue-600 text-sm font-medium mb-2">ID</label>
+                            <input
+                                type="text"
+                                className="w-full p-2 border border-gray-300 rounded"
+                                value={nftId}
+                                onChange={(e) => setNftId(e.target.value)}
+                            />
+                        </>
+                    )}
                 </div>
 
                 <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded-lg text-lg">
