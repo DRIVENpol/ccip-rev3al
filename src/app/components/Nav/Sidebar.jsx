@@ -1,6 +1,10 @@
+'use client';
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Sidebar({ isOpen, toggleSidebar, children }) {
+    const pathname = usePathname();
+
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
@@ -9,13 +13,19 @@ export default function Sidebar({ isOpen, toggleSidebar, children }) {
         }
     }, [isOpen]);
 
+    useEffect(() => {
+        if (isOpen) {
+            toggleSidebar();
+        }
+    }, [pathname]);
+
     return (
         <>
             <div
-                className={`fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm transition-opacity duration-300 ease-in-out ${
+                className={`fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40 transition-opacity duration-300 ease-in-out ${
                     isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
                 }`}
-                onClick={toggleSidebar} 
+                onClick={toggleSidebar}
             ></div>
 
             <div
