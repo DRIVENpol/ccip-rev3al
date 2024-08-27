@@ -1,0 +1,47 @@
+'use client'
+import HeroImage from "@/app/assets/ccip.png"
+
+import { useWeb3Modal } from '@web3modal/wagmi/react'
+import { useAccount } from 'wagmi';
+
+export default function HeroBanner() {
+    const { isConnected } = useAccount();
+    const { open, close } = useWeb3Modal();
+
+    return (
+        <section className="bg-white py-16">
+            <div className="container mx-auto flex flex-col md:flex-row items-center">
+                {/* Left Side: Text Content */}
+                <div className="md:w-1/2 text-center md:text-left p-4">
+                    <h1 className="text-4xl font-bold mb-4">CCIP X REV3AL</h1>
+                    <p className="text-lg mb-6">
+                        Unlock the full potential of your tokens with cross-chain compatibility and enhanced security features. Explore seamless integration across multiple blockchains.
+                    </p>
+                    {isConnected ? (
+                        <>
+                            <button className="bg-blue-600 text-white py-2 px-6 rounded-lg text-lg">
+                                Dashboard
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            {/* <button className="bg-blue-600 text-white py-2 px-6 rounded-lg text-lg" onClick={open}>
+                                Start
+                            </button> */}
+                            <w3m-button />
+                        </>
+                    )}
+                </div>
+
+                {/* Right Side: Image */}
+                <div className="md:w-1/2 p-4">
+                    <img
+                        src={HeroImage.src}
+                        alt="CCIP X REV3AL"
+                        className="w-full h-auto rounded-lg"
+                    />
+                </div>
+            </div>
+        </section>
+    );
+}
