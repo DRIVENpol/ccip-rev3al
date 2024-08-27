@@ -3,10 +3,16 @@ import HeroImage from "@/app/assets/ccip.png"
 
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 import { useAccount } from 'wagmi';
+import { useRouter } from 'next/navigation';
 
 export default function HeroBanner() {
     const { isConnected } = useAccount();
-    const { open, close } = useWeb3Modal();
+
+    const router = useRouter();
+
+    const handleNavigate = (path) => {
+        router.push(path);
+    };
 
     return (
         <section className="bg-white py-16">
@@ -18,7 +24,9 @@ export default function HeroBanner() {
                     </p>
                     <div className="flex justify-center md:justify-start">
                         {isConnected ? (
-                            <button className="bg-blue-600 text-white py-2 px-6 rounded-lg text-lg">
+                            <button className="bg-blue-600 text-white py-2 px-6 rounded-lg text-lg"
+                            onClick={() => handleNavigate('/dashboard')}
+                            >
                                 Dashboard
                             </button>
                         ) : (
