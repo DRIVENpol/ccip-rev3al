@@ -1,7 +1,7 @@
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
 
 import { cookieStorage, createStorage, http } from 'wagmi'
-import { mainnet, sepolia, bscTestnet } from 'wagmi/chains'
+import { mainnet, sepolia, bscTestnet, bsc, avalanche, avalancheFuji, polygon, polygonMumbai } from 'wagmi/chains'
 
 export const projectId = "80bf1c032a09be33ea76ff96fa785944"
 
@@ -15,11 +15,17 @@ const metadata = {
 }
 
 export const config = defaultWagmiConfig({
-  chains: [sepolia, bscTestnet],
+  chains: [mainnet, sepolia, bscTestnet, bsc, avalanche, avalancheFuji, polygon, polygonMumbai],
 
   transports: {
     [sepolia.id]: http(),
     [bscTestnet.id]: http(),
+    [mainnet.id]: http(),
+    [bsc.id]: http(),
+    [avalanche.id]: http(),
+    [avalancheFuji.id]: http(),
+    [polygon.id]: http(),
+    [polygonMumbai.id]: http()
   },
   projectId,
   metadata,
