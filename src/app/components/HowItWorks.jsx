@@ -1,6 +1,14 @@
+'use client';
 import { FaPlus, FaTachometerAlt, FaExchangeAlt } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
 
 export default function HowItWorks() {
+    const router = useRouter();
+
+    const handleNavigate = (path) => {
+        router.push(path);
+    };
+
     return (
         <section className="bg-white py-16">
             <div className="container mx-auto px-4">
@@ -19,7 +27,10 @@ export default function HowItWorks() {
                                 Create an ERC20 token or an NFT if you don't have any tokens.
                             </p>
                         </div>
-                        <button className="bg-white text-blue-600 py-2 px-6 rounded-lg text-lg flex items-center">
+                        <button
+                            className="bg-white text-blue-600 py-2 px-6 rounded-lg text-lg flex items-center"
+                            onClick={() => handleNavigate('/create-token')}
+                        >
                             <FaPlus className="mr-2" /> Create
                         </button>
                     </div>
@@ -32,7 +43,10 @@ export default function HowItWorks() {
                                 Go to your dashboard and make your token multichain.
                             </p>
                         </div>
-                        <button className="bg-white text-blue-600 py-2 px-6 rounded-lg text-lg flex items-center">
+                        <button
+                            className="bg-white text-blue-600 py-2 px-6 rounded-lg text-lg flex items-center"
+                            onClick={() => handleNavigate('/dashboard')}
+                        >
                             <FaTachometerAlt className="mr-2" /> Dashboard
                         </button>
                     </div>
@@ -45,7 +59,10 @@ export default function HowItWorks() {
                                 Control your tokens on Chain A from Chain B from your dashboard.
                             </p>
                         </div>
-                        <button className="bg-white text-blue-600 py-2 px-6 rounded-lg text-lg flex items-center">
+                        <button
+                            className="bg-white text-blue-600 py-2 px-6 rounded-lg text-lg flex items-center"
+                            onClick={() => handleNavigate('/dashboard')}
+                        >
                             <FaExchangeAlt className="mr-2" /> Control
                         </button>
                     </div>
