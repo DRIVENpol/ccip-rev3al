@@ -20,12 +20,16 @@ module.exports = {
     },
   },
   networks: {
-    sepolia: {
-      url: "https://ethereum-sepolia-rpc.publicnode.com",
+    avalanche: {
+      url: "https://api.avax.network/ext/bc/C/rpc",
       accounts: [process.env.PRIVATE_KEY],
     },
     bsc: {
-      url: "https://bsc-testnet-rpc.publicnode.com",
+      url: "https://bsc-dataseed1.binance.org/",
+      accounts: [process.env.PRIVATE_KEY],
+    },
+    polygon: {
+      url: "https://polygon-rpc.com/",
       accounts: [process.env.PRIVATE_KEY],
     },
   },

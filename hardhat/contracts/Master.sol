@@ -15,6 +15,7 @@ import {CCIPReceiver} from "@chainlink/contracts-ccip/src/v0.8/ccip/applications
 // 2) Receive a call from the other chain > remove balance
 // 3) Call the other chain > send tokens out
 
+// Master On Avalanche
 contract Base_Master {
     function _depositToken(address user, address token, uint256 amount) internal virtual {}
     function _withdrawTokens(address user, address token, uint256 amount) internal virtual {}

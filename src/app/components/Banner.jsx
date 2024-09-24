@@ -1,17 +1,17 @@
 export default function Banner() {
     const logos = [
-        {
-            src: "https://cryptologos.cc/logos/versions/ethereum-eth-logo-colored.svg?v=033",
-            alt: "Ethereum Logo",
-        },
+        // {
+        //     src: "https://cryptologos.cc/logos/versions/ethereum-eth-logo-colored.svg?v=033",
+        //     alt: "Ethereum Logo",
+        // },
         {
             src: "https://cryptologos.cc/logos/bnb-bnb-logo.png?v=033",
             alt: "BSC Logo",
         },
-        {
-            src: "https://cryptologos.cc/logos/polygon-matic-logo.png?v=033",
-            alt: "Polygon Logo",
-        },
+        // {
+        //     src: "https://cryptologos.cc/logos/polygon-matic-logo.png?v=033",
+        //     alt: "Polygon Logo",
+        // },
         {
             src: "https://cryptologos.cc/logos/avalanche-avax-logo.png?v=033",
             alt: "Avalanche Logo",

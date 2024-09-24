@@ -1,35 +1,37 @@
 'use client';
-import { useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useState, useEffect } from 'react';
+import { useAccount, useNetwork } from 'wagmi';
 
 const logos = [
     {
-        src: "https://cryptologos.cc/logos/versions/ethereum-eth-logo-colored.svg?v=033",
-        alt: "Ethereum Logo",
-    },
-    {
         src: "https://cryptologos.cc/logos/bnb-bnb-logo.png?v=033",
-        alt: "BSC Logo",
+        alt: "BNB Smart Chain",
+        chainId: 56,
     },
     {
         src: "https://cryptologos.cc/logos/polygon-matic-logo.png?v=033",
-        alt: "Polygon Logo",
+        alt: "Polygon",
+        chainId: 137,
     },
     {
         src: "https://cryptologos.cc/logos/avalanche-avax-logo.png?v=033",
-        alt: "Avalanche Logo",
+        alt: "Avalanche",
+        chainId: 43114, 
     },
 ];
 
 export default function StepForm() {
     const [tokenType, setTokenType] = useState('erc20');
     const [selectedToken, setSelectedToken] = useState('');
-    const [homeChain, setHomeChain] = useState('');
     const [destinationChain, setDestinationChain] = useState('');
     const [amount, setAmount] = useState('');
     const [nftId, setNftId] = useState('');
 
-    const { isConnected } = useAccount();
+    const { isConnected, chainId } = useAccount();
+    const currentChainId = chainId;
+
+    // Filter out the current chain from destination chain options
+    const filteredChains = logos.filter((logo) => logo.chainId !== currentChainId);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -49,11 +51,19 @@ export default function StepForm() {
                         className="w-full p-2 border border-gray-300 rounded"
                     >
                         <option value="erc20">ERC20</option>
-                        <option value="erc721">ERC721</option>
+                        <option value="erc721" disabled>ERC721 (Coming Soon!)</option>
                     </select>
                 </div>
 
-                {/* Step 1: Select Token */}
+                {/* Step 1: Select Home Chain */}
+                <div className="mb-4">
+                    <label className="block text-blue-600 text-sm font-medium mb-2">
+                        Select Home Chain
+                    </label>
+                    <w3m-network-button />
+                </div>
+
+                {/* Step 2: Select Token */}
                 <div className="mb-4">
                     <label className="block text-blue-600 text-sm font-medium mb-2">Select Token</label>
                     <select
@@ -68,14 +78,6 @@ export default function StepForm() {
                     </select>
                 </div>
 
-                {/* Step 2: Select Home Chain */}
-                <div className="mb-4">
-                    <label className="block text-blue-600 text-sm font-medium mb-2">
-                        Select Home Chain
-                    </label>
-                    <w3m-network-button />
-                </div>
-
                 {/* Step 3: Select Destination Chain */}
                 <div className="mb-4">
                     <label className="block text-blue-600 text-sm font-medium mb-2">
@@ -87,7 +89,7 @@ export default function StepForm() {
                         className="w-full p-2 border border-gray-300 rounded"
                     >
                         <option value="" disabled>Select destination chain</option>
-                        {logos.map((logo, index) => (
+                        {filteredChains.map((logo, index) => (
                             <option key={index} value={logo.alt}>{logo.alt}</option>
                         ))}
                     </select>

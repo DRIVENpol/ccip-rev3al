@@ -7,3 +7,5 @@ async function main() {
 }
 
 main().catch(console.error);
+
+// npx hardhat ignition deploy ignition/modules/TokenLauncher.js --network polygon --verify

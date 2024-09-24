@@ -22,6 +22,7 @@ contract Base_Vault {
     function getLength(address user) external virtual view returns(uint256) {}
 }
 
+// Vault on BSC | From Avalanche
 contract Vault_CCIP is CCIPReceiver, Base_Vault, Ownable {
     using SafeERC20 for IERC20;
 

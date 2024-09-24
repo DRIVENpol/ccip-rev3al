@@ -39,12 +39,10 @@ export default function MyCrosschainAssets() {
                     <FaCoins className="mr-2" /> Tokens
                 </button>
                 <button
-                    className={`flex items-center px-4 py-2 rounded-lg ${
-                        activeTab === 'nfts' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'
-                    }`}
-                    onClick={() => setActiveTab('nfts')}
+                    className={`flex items-center px-4 py-2 rounded-lg cursor-not-allowed opacity-50`}
+                    disabled
                 >
-                    <FaImage className="mr-2" /> NFTs
+                    <FaImage className="mr-2" /> NFTs (coming soon!)
                 </button>
             </div>
 
@@ -77,47 +75,6 @@ export default function MyCrosschainAssets() {
                                 </td>
                                 <td className="p-4 whitespace-nowrap">1000</td>
                                 <td className="p-4 whitespace-nowrap">500</td>
-                                <td className="p-4 whitespace-nowrap">
-                                    <button className="bg-blue-600 text-white py-1 px-3 rounded-lg flex items-center">
-                                        <FaPaperPlane className="mr-2" /> Send
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            )}
-
-            {activeTab === 'nfts' && (
-                <div className="overflow-x-auto">
-                    <table className="min-w-full bg-white rounded-2xl shadow-lg text-black">
-                        <thead className="bg-gray-100">
-                            <tr>
-                                <th className="text-left p-4 whitespace-nowrap">Collection Address</th>
-                                <th className="text-left p-4 whitespace-nowrap">NFT ID</th>
-                                <th className="text-left p-4 whitespace-nowrap">Token Name</th>
-                                <th className="text-left p-4 whitespace-nowrap">Token Symbol</th>
-                                <th className="text-left p-4 whitespace-nowrap">Home</th>
-                                <th className="text-left p-4 whitespace-nowrap">Destination</th>
-                                <th className="text-left p-4 whitespace-nowrap">Balance Home</th>
-                                <th className="text-left p-4 whitespace-nowrap">Balance Destination</th>
-                                <th className="text-left p-4 whitespace-nowrap">Send</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr className="border-t border-gray-200">
-                                <td className="p-4 whitespace-nowrap">0x789...012</td>
-                                <td className="p-4 whitespace-nowrap">1</td>
-                                <td className="p-4 whitespace-nowrap">Example NFT</td>
-                                <td className="p-4 whitespace-nowrap">EXN</td>
-                                <td className="p-4 whitespace-nowrap">
-                                    <img src={logos[2].src} alt={logos[2].alt} className="h-6 inline-block" />
-                                </td>
-                                <td className="p-4 whitespace-nowrap">
-                                    <img src={logos[3].src} alt={logos[3].alt} className="h-6 inline-block" />
-                                </td>
-                                <td className="p-4 whitespace-nowrap">1</td>
-                                <td className="p-4 whitespace-nowrap">0</td>
                                 <td className="p-4 whitespace-nowrap">
                                     <button className="bg-blue-600 text-white py-1 px-3 rounded-lg flex items-center">
                                         <FaPaperPlane className="mr-2" /> Send

@@ -47,15 +47,21 @@ export default function CreateNFTForm() {
                             onChange={(e) => setIpfsLink(e.target.value)}
                         />
                     </div>
+                    <div className="mb-8">
+                        <label className="block text-blue-600 text-sm font-medium mb-2">
+                            Select Home Chain
+                        </label>
+                        <w3m-network-button />
+                    </div>
                     <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded-lg text-lg flex items-center">
                         <FaPlus className="mr-2" /> Create
                     </button>
                 </form>
             </div>
 
-            {!isConnected && (
+            {true && (
                 <div className="absolute inset-0 bg-white bg-opacity-30 backdrop-blur-sm flex items-center justify-center rounded-lg">
-                    Please connect your wallet!
+                    Coming Soon!
                 </div>
             )}
         </div>
