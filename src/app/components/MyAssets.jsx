@@ -28,7 +28,11 @@ export default function MyAssets() {
 
     useEffect(() => {
         if (isConnected) {
-            fetchTokens();
+            const intervalId = setInterval(() => {
+                fetchTokens();
+            }, 5000);
+
+            return () => clearInterval(intervalId);
         }
     }, [isConnected, selectedChain]);
 
@@ -120,7 +124,7 @@ export default function MyAssets() {
                         className={`flex items-center px-3 py-1.5 rounded-lg cursor-not-allowed opacity-50`}
                         disabled
                     >
-                        <FaImage className="mr-2" /> NFTs (coming soon!)
+                        <FaImage className="mr-2" /> NFTs (Coming Soon!)
                     </button>
                 </div>
                 <div className="w-full sm:w-auto flex justify-center mt-4 sm:mt-0">

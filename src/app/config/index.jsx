@@ -15,7 +15,7 @@ const metadata = {
 }
 
 export const config = defaultWagmiConfig({
-  chains: [bsc, avalanche, polygon],
+  chains: [bsc, avalanche],
 
   transports: {
     // [sepolia.id]: http(),
@@ -24,7 +24,7 @@ export const config = defaultWagmiConfig({
     [bsc.id]: http(),
     [avalanche.id]: http(),
     // [avalancheFuji.id]: http(),
-    [polygon.id]: http(),
+    // [polygon.id]: http(),
     // [polygonMumbai.id]: http()
   },
   projectId,

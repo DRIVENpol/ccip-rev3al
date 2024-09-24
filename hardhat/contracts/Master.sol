@@ -15,7 +15,7 @@ import {CCIPReceiver} from "@chainlink/contracts-ccip/src/v0.8/ccip/applications
 // 2) Receive a call from the other chain > remove balance
 // 3) Call the other chain > send tokens out
 
-// Master On Avalanche
+// Master On BSC
 contract Base_Master {
     function _depositToken(address user, address token, uint256 amount) internal virtual {}
     function _withdrawTokens(address user, address token, uint256 amount) internal virtual {}
@@ -26,10 +26,10 @@ contract Base_Master {
 contract Master is CCIPReceiver, Base_Master, Ownable {
     using SafeERC20 for IERC20;
 
-    uint64 immutable destinationChainSelector = 13264668187771770619;
+    uint64 immutable destinationChainSelector = 6433500567565415381; // AVALANCHE
 
     address private vault; // Vault on the destination chain
-    address private router_ccip = 0x0BF3dE8c5D3e8A2B34D2BEeB17ABfCeBaf363A59;
+    address private router_ccip = 0x34B03Cb9086d7D758AC55af71584F81A598759FE;
 
     mapping(address => address[]) public myCrossChainTokens;
     mapping(address => mapping(address => uint256)) public balance;

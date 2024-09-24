@@ -22,14 +22,14 @@ contract Base_Vault {
     function getLength(address user) external virtual view returns(uint256) {}
 }
 
-// Vault on BSC | From Avalanche
+// Vault on BSC
 contract Vault_CCIP is CCIPReceiver, Base_Vault, Ownable {
     using SafeERC20 for IERC20;
 
-    uint64 immutable destinationChainSelector = 16015286601757825753;
+    uint64 immutable destinationChainSelector = 6433500567565415381;
 
     address private master; // Contract from the other network
-    address private router_ccip = 0xE1053aE1857476f36A3C62580FF9b016E8EE8F6f;
+    address private router_ccip = 0x34B03Cb9086d7D758AC55af71584F81A598759FE;
 
     mapping(address => address[]) public myCrossChainTokens;
     mapping(address => mapping(address => uint256)) public balance;

@@ -156,6 +156,1033 @@
         },
         "solcVersion": "0.8.24"
       },
+      "@openzeppelin/contracts/token/ERC20/IERC20.sol:IERC20": {
+        "src": "@openzeppelin/contracts/token/ERC20/IERC20.sol:9",
+        "inherit": [],
+        "libraries": [],
+        "methods": [
+          "totalSupply()",
+          "balanceOf(address)",
+          "transfer(address,uint256)",
+          "allowance(address,address)",
+          "approve(address,uint256)",
+          "transferFrom(address,address,uint256)"
+        ],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit.sol:IERC20Permit": {
+        "src": "@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit.sol:42",
+        "inherit": [],
+        "libraries": [],
+        "methods": [
+          "permit(address,address,uint256,uint256,uint8,bytes32,bytes32)",
+          "nonces(address)",
+          "DOMAIN_SEPARATOR()"
+        ],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol:SafeERC20": {
+        "src": "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol:19",
+        "version": {
+          "withMetadata": "62e7d513f57793728a952766c57455fc51c417020df69360a48fc91205911cc9",
+          "withoutMetadata": "a64c6cf9c6ba9368f5132c93a0196b3204a7963dbb4dd05dfddb4ab23126b8db",
+          "linkedWithoutMetadata": "a64c6cf9c6ba9368f5132c93a0196b3204a7963dbb4dd05dfddb4ab23126b8db"
+        },
+        "inherit": [],
+        "libraries": [
+          "@openzeppelin/contracts/utils/Address.sol:Address"
+        ],
+        "methods": [],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@openzeppelin/contracts/utils/Address.sol:Address": {
+        "src": "@openzeppelin/contracts/utils/Address.sol:9",
+        "version": {
+          "withMetadata": "b76b13cf9e49226abd89dfed9c7a7e282f0b9c562447ba97c706618d8531fe18",
+          "withoutMetadata": "a64c6cf9c6ba9368f5132c93a0196b3204a7963dbb4dd05dfddb4ab23126b8db",
+          "linkedWithoutMetadata": "a64c6cf9c6ba9368f5132c93a0196b3204a7963dbb4dd05dfddb4ab23126b8db"
+        },
+        "inherit": [],
+        "libraries": [],
+        "methods": [],
+        "linkReferences": [],
+        "errors": [
+          {
+            "kind": "delegatecall",
+            "src": "@openzeppelin/contracts/utils/Address.sol:105"
+          }
+        ],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@openzeppelin/contracts/utils/Context.sol:Context": {
+        "src": "@openzeppelin/contracts/utils/Context.sol:16",
+        "inherit": [],
+        "libraries": [],
+        "methods": [],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "contracts/Vault.sol:Base_Vault": {
+        "src": "contracts/Vault.sol:18",
+        "version": {
+          "withMetadata": "e0bcdcb1db20d35baba1d93e6af7f8f7a76989f0a3dbc971d5c51352c9a22e29",
+          "withoutMetadata": "c9eff472d5f6581903bf1315095e83437417463702924a291755100e0d8e7b81",
+          "linkedWithoutMetadata": "c9eff472d5f6581903bf1315095e83437417463702924a291755100e0d8e7b81"
+        },
+        "inherit": [],
+        "libraries": [],
+        "methods": [
+          "depositToken(address,address,uint256)",
+          "withdrawTokens(address,uint256)",
+          "getLength(address)"
+        ],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "contracts/Vault.sol:Vault_CCIP": {
+        "src": "contracts/Vault.sol:26",
+        "version": {
+          "withMetadata": "02d0911a79bbaa553f0678895d609a962c03a62f8503d8389a0e2885593c5e07",
+          "withoutMetadata": "682d6caf4fb158d7f76e558e1694730230c4bf40d22b0e5b920d87635f5770b4",
+          "linkedWithoutMetadata": "682d6caf4fb158d7f76e558e1694730230c4bf40d22b0e5b920d87635f5770b4"
+        },
+        "inherit": [
+          "@openzeppelin/contracts/access/Ownable.sol:Ownable",
+          "@openzeppelin/contracts/utils/Context.sol:Context",
+          "contracts/Vault.sol:Base_Vault",
+          "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol:CCIPReceiver",
+          "@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/utils/introspection/IERC165.sol:IERC165",
+          "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IAny2EVMMessageReceiver.sol:IAny2EVMMessageReceiver"
+        ],
+        "libraries": [
+          "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol:SafeERC20",
+          "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol:Client"
+        ],
+        "methods": [
+          "()",
+          "()",
+          "depositToken(address,address,uint256)",
+          "withdrawTokens(address,uint256)",
+          "withdrawNative(address)",
+          "withdrawToken(address,address)",
+          "getLength(address)",
+          "changeMaster(address)"
+        ],
+        "linkReferences": [],
+        "errors": [
+          {
+            "kind": "constructor",
+            "contract": "Vault_CCIP",
+            "src": "contracts/Vault.sol:40"
+          },
+          {
+            "kind": "state-variable-immutable",
+            "name": "destinationChainSelector",
+            "src": "contracts/Vault.sol:29"
+          },
+          {
+            "kind": "state-variable-assignment",
+            "name": "router_ccip",
+            "src": "contracts/Vault.sol:32"
+          }
+        ],
+        "layout": {
+          "storage": [
+            {
+              "label": "_owner",
+              "offset": 0,
+              "slot": "0",
+              "type": "t_address",
+              "contract": "Ownable",
+              "src": "@openzeppelin/contracts/access/Ownable.sol:21"
+            },
+            {
+              "label": "master",
+              "offset": 0,
+              "slot": "1",
+              "type": "t_address",
+              "contract": "Vault_CCIP",
+              "src": "contracts/Vault.sol:31"
+            },
+            {
+              "label": "router_ccip",
+              "offset": 0,
+              "slot": "2",
+              "type": "t_address",
+              "contract": "Vault_CCIP",
+              "src": "contracts/Vault.sol:32"
+            },
+            {
+              "label": "myCrossChainTokens",
+              "offset": 0,
+              "slot": "3",
+              "type": "t_mapping(t_address,t_array(t_address)dyn_storage)",
+              "contract": "Vault_CCIP",
+              "src": "contracts/Vault.sol:34"
+            },
+            {
+              "label": "balance",
+              "offset": 0,
+              "slot": "4",
+              "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+              "contract": "Vault_CCIP",
+              "src": "contracts/Vault.sol:35"
+            },
+            {
+              "label": "tokenExist",
+              "offset": 0,
+              "slot": "5",
+              "type": "t_mapping(t_address,t_mapping(t_address,t_bool))",
+              "contract": "Vault_CCIP",
+              "src": "contracts/Vault.sol:36"
+            }
+          ],
+          "types": {
+            "t_address": {
+              "label": "address",
+              "numberOfBytes": "20"
+            },
+            "t_array(t_address)dyn_storage": {
+              "label": "address[]",
+              "numberOfBytes": "32"
+            },
+            "t_bool": {
+              "label": "bool",
+              "numberOfBytes": "1"
+            },
+            "t_mapping(t_address,t_array(t_address)dyn_storage)": {
+              "label": "mapping(address => address[])",
+              "numberOfBytes": "32"
+            },
+            "t_mapping(t_address,t_bool)": {
+              "label": "mapping(address => bool)",
+              "numberOfBytes": "32"
+            },
+            "t_mapping(t_address,t_mapping(t_address,t_bool))": {
+              "label": "mapping(address => mapping(address => bool))",
+              "numberOfBytes": "32"
+            },
+            "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+              "label": "mapping(address => mapping(address => uint256))",
+              "numberOfBytes": "32"
+            },
+            "t_mapping(t_address,t_uint256)": {
+              "label": "mapping(address => uint256)",
+              "numberOfBytes": "32"
+            },
+            "t_uint256": {
+              "label": "uint256",
+              "numberOfBytes": "32"
+            }
+          },
+          "layoutVersion": "1.2",
+          "flat": true,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      }
+    },
+    {
+      "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol:CCIPReceiver": {
+        "src": "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol:11",
+        "inherit": [
+          "@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/utils/introspection/IERC165.sol:IERC165",
+          "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IAny2EVMMessageReceiver.sol:IAny2EVMMessageReceiver"
+        ],
+        "libraries": [],
+        "methods": [
+          "supportsInterface(bytes4)",
+          "ccipReceive((bytes32,uint64,bytes,bytes,struct Client.EVMTokenAmount[]))",
+          "getRouter()"
+        ],
+        "linkReferences": [],
+        "errors": [
+          {
+            "kind": "constructor",
+            "contract": "CCIPReceiver",
+            "src": "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol:14"
+          },
+          {
+            "kind": "state-variable-immutable",
+            "name": "i_ccipRouter",
+            "src": "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol:12"
+          }
+        ],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IAny2EVMMessageReceiver.sol:IAny2EVMMessageReceiver": {
+        "src": "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IAny2EVMMessageReceiver.sol:8",
+        "inherit": [],
+        "libraries": [],
+        "methods": [
+          "ccipReceive((bytes32,uint64,bytes,bytes,struct Client.EVMTokenAmount[]))"
+        ],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IRouterClient.sol:IRouterClient": {
+        "src": "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IRouterClient.sol:6",
+        "inherit": [],
+        "libraries": [],
+        "methods": [
+          "isChainSupported(uint64)",
+          "getSupportedTokens(uint64)",
+          "getFee(uint64,(bytes,bytes,struct Client.EVMTokenAmount[],address,bytes))",
+          "ccipSend(uint64,(bytes,bytes,struct Client.EVMTokenAmount[],address,bytes))"
+        ],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol:Client": {
+        "src": "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol:5",
+        "version": {
+          "withMetadata": "eaa92b9ef94095e3d82116f55c8989ee8939d797066236cd61dbbc1575efd20c",
+          "withoutMetadata": "1d00a90355856fb2d00aac3cc3e121a643444832e08f1002248c4e37cdc9c8a7",
+          "linkedWithoutMetadata": "1d00a90355856fb2d00aac3cc3e121a643444832e08f1002248c4e37cdc9c8a7"
+        },
+        "inherit": [],
+        "libraries": [],
+        "methods": [],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/utils/introspection/IERC165.sol:IERC165": {
+        "src": "@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/utils/introspection/IERC165.sol:15",
+        "inherit": [],
+        "libraries": [],
+        "methods": [
+          "supportsInterface(bytes4)"
+        ],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@openzeppelin/contracts/access/Ownable.sol:Ownable": {
+        "src": "@openzeppelin/contracts/access/Ownable.sol:20",
+        "inherit": [
+          "@openzeppelin/contracts/utils/Context.sol:Context"
+        ],
+        "libraries": [],
+        "methods": [
+          "owner()",
+          "renounceOwnership()",
+          "transferOwnership(address)"
+        ],
+        "linkReferences": [],
+        "errors": [
+          {
+            "kind": "constructor",
+            "contract": "Ownable",
+            "src": "@openzeppelin/contracts/access/Ownable.sol:38"
+          }
+        ],
+        "layout": {
+          "storage": [
+            {
+              "label": "_owner",
+              "offset": 0,
+              "slot": "0",
+              "type": "t_address",
+              "contract": "Ownable",
+              "src": "@openzeppelin/contracts/access/Ownable.sol:21"
+            }
+          ],
+          "types": {
+            "t_address": {
+              "label": "address",
+              "numberOfBytes": "20"
+            }
+          },
+          "layoutVersion": "1.2",
+          "flat": true,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@openzeppelin/contracts/token/ERC20/IERC20.sol:IERC20": {
+        "src": "@openzeppelin/contracts/token/ERC20/IERC20.sol:9",
+        "inherit": [],
+        "libraries": [],
+        "methods": [
+          "totalSupply()",
+          "balanceOf(address)",
+          "transfer(address,uint256)",
+          "allowance(address,address)",
+          "approve(address,uint256)",
+          "transferFrom(address,address,uint256)"
+        ],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit.sol:IERC20Permit": {
+        "src": "@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit.sol:42",
+        "inherit": [],
+        "libraries": [],
+        "methods": [
+          "permit(address,address,uint256,uint256,uint8,bytes32,bytes32)",
+          "nonces(address)",
+          "DOMAIN_SEPARATOR()"
+        ],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol:SafeERC20": {
+        "src": "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol:19",
+        "version": {
+          "withMetadata": "62e7d513f57793728a952766c57455fc51c417020df69360a48fc91205911cc9",
+          "withoutMetadata": "a64c6cf9c6ba9368f5132c93a0196b3204a7963dbb4dd05dfddb4ab23126b8db",
+          "linkedWithoutMetadata": "a64c6cf9c6ba9368f5132c93a0196b3204a7963dbb4dd05dfddb4ab23126b8db"
+        },
+        "inherit": [],
+        "libraries": [
+          "@openzeppelin/contracts/utils/Address.sol:Address"
+        ],
+        "methods": [],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@openzeppelin/contracts/utils/Address.sol:Address": {
+        "src": "@openzeppelin/contracts/utils/Address.sol:9",
+        "version": {
+          "withMetadata": "b76b13cf9e49226abd89dfed9c7a7e282f0b9c562447ba97c706618d8531fe18",
+          "withoutMetadata": "a64c6cf9c6ba9368f5132c93a0196b3204a7963dbb4dd05dfddb4ab23126b8db",
+          "linkedWithoutMetadata": "a64c6cf9c6ba9368f5132c93a0196b3204a7963dbb4dd05dfddb4ab23126b8db"
+        },
+        "inherit": [],
+        "libraries": [],
+        "methods": [],
+        "linkReferences": [],
+        "errors": [
+          {
+            "kind": "delegatecall",
+            "src": "@openzeppelin/contracts/utils/Address.sol:105"
+          }
+        ],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@openzeppelin/contracts/utils/Context.sol:Context": {
+        "src": "@openzeppelin/contracts/utils/Context.sol:16",
+        "inherit": [],
+        "libraries": [],
+        "methods": [],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "contracts/Master.sol:Base_Master": {
+        "src": "contracts/Master.sol:19",
+        "version": {
+          "withMetadata": "56de1bb63d95be81504e1f155d992e29f8e3c572205402f6b57d384296fc8c7e",
+          "withoutMetadata": "3b67385dbb87cdbc5d633842fddff4b5829abdbfc032fce2540eedb65d3c776a",
+          "linkedWithoutMetadata": "3b67385dbb87cdbc5d633842fddff4b5829abdbfc032fce2540eedb65d3c776a"
+        },
+        "inherit": [],
+        "libraries": [],
+        "methods": [
+          "sendTokensOut(address,address,uint256)",
+          "getLength(address)"
+        ],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "contracts/Master.sol:Master": {
+        "src": "contracts/Master.sol:26",
+        "version": {
+          "withMetadata": "2607637518c2d9b82d7425d126db8fd71d4dca22ea78c3291a9c2183ecd86b75",
+          "withoutMetadata": "a24ef1b0ff4afd7b3ab4afc77acbd930f67ffa1edd586f356decec3fa54b42a0",
+          "linkedWithoutMetadata": "a24ef1b0ff4afd7b3ab4afc77acbd930f67ffa1edd586f356decec3fa54b42a0"
+        },
+        "inherit": [
+          "@openzeppelin/contracts/access/Ownable.sol:Ownable",
+          "@openzeppelin/contracts/utils/Context.sol:Context",
+          "contracts/Master.sol:Base_Master",
+          "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol:CCIPReceiver",
+          "@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/utils/introspection/IERC165.sol:IERC165",
+          "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IAny2EVMMessageReceiver.sol:IAny2EVMMessageReceiver"
+        ],
+        "libraries": [
+          "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol:SafeERC20",
+          "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol:Client"
+        ],
+        "methods": [
+          "()",
+          "()",
+          "sendTokensOut(address,address,uint256)",
+          "setVault(address)",
+          "withdrawNative(address)",
+          "withdrawToken(address,address)",
+          "getLength(address)"
+        ],
+        "linkReferences": [],
+        "errors": [
+          {
+            "kind": "constructor",
+            "contract": "Master",
+            "src": "contracts/Master.sol:40"
+          },
+          {
+            "kind": "state-variable-immutable",
+            "name": "destinationChainSelector",
+            "src": "contracts/Master.sol:29"
+          },
+          {
+            "kind": "state-variable-assignment",
+            "name": "router_ccip",
+            "src": "contracts/Master.sol:32"
+          }
+        ],
+        "layout": {
+          "storage": [
+            {
+              "label": "_owner",
+              "offset": 0,
+              "slot": "0",
+              "type": "t_address",
+              "contract": "Ownable",
+              "src": "@openzeppelin/contracts/access/Ownable.sol:21"
+            },
+            {
+              "label": "vault",
+              "offset": 0,
+              "slot": "1",
+              "type": "t_address",
+              "contract": "Master",
+              "src": "contracts/Master.sol:31"
+            },
+            {
+              "label": "router_ccip",
+              "offset": 0,
+              "slot": "2",
+              "type": "t_address",
+              "contract": "Master",
+              "src": "contracts/Master.sol:32"
+            },
+            {
+              "label": "myCrossChainTokens",
+              "offset": 0,
+              "slot": "3",
+              "type": "t_mapping(t_address,t_array(t_address)dyn_storage)",
+              "contract": "Master",
+              "src": "contracts/Master.sol:34"
+            },
+            {
+              "label": "balance",
+              "offset": 0,
+              "slot": "4",
+              "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+              "contract": "Master",
+              "src": "contracts/Master.sol:35"
+            },
+            {
+              "label": "tokenExist",
+              "offset": 0,
+              "slot": "5",
+              "type": "t_mapping(t_address,t_mapping(t_address,t_bool))",
+              "contract": "Master",
+              "src": "contracts/Master.sol:36"
+            }
+          ],
+          "types": {
+            "t_address": {
+              "label": "address",
+              "numberOfBytes": "20"
+            },
+            "t_array(t_address)dyn_storage": {
+              "label": "address[]",
+              "numberOfBytes": "32"
+            },
+            "t_bool": {
+              "label": "bool",
+              "numberOfBytes": "1"
+            },
+            "t_mapping(t_address,t_array(t_address)dyn_storage)": {
+              "label": "mapping(address => address[])",
+              "numberOfBytes": "32"
+            },
+            "t_mapping(t_address,t_bool)": {
+              "label": "mapping(address => bool)",
+              "numberOfBytes": "32"
+            },
+            "t_mapping(t_address,t_mapping(t_address,t_bool))": {
+              "label": "mapping(address => mapping(address => bool))",
+              "numberOfBytes": "32"
+            },
+            "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+              "label": "mapping(address => mapping(address => uint256))",
+              "numberOfBytes": "32"
+            },
+            "t_mapping(t_address,t_uint256)": {
+              "label": "mapping(address => uint256)",
+              "numberOfBytes": "32"
+            },
+            "t_uint256": {
+              "label": "uint256",
+              "numberOfBytes": "32"
+            }
+          },
+          "layoutVersion": "1.2",
+          "flat": true,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "contracts/Vault.sol:Base_Vault": {
+        "src": "contracts/Vault.sol:18",
+        "version": {
+          "withMetadata": "bb0438efc49ef847bd1fe822b28460c87edc0db229e7b4841125b589641505eb",
+          "withoutMetadata": "c9eff472d5f6581903bf1315095e83437417463702924a291755100e0d8e7b81",
+          "linkedWithoutMetadata": "c9eff472d5f6581903bf1315095e83437417463702924a291755100e0d8e7b81"
+        },
+        "inherit": [],
+        "libraries": [],
+        "methods": [
+          "depositToken(address,address,uint256)",
+          "withdrawTokens(address,uint256)",
+          "getLength(address)"
+        ],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "contracts/Vault.sol:Vault_CCIP": {
+        "src": "contracts/Vault.sol:26",
+        "version": {
+          "withMetadata": "19eafa0328199185c207a242014142727639cc7a2af8904012dbd772d713bad5",
+          "withoutMetadata": "fb838c146ca1d7db89f9b98e988d7e5241f3630421257ff25d7ddaf6e50729dd",
+          "linkedWithoutMetadata": "fb838c146ca1d7db89f9b98e988d7e5241f3630421257ff25d7ddaf6e50729dd"
+        },
+        "inherit": [
+          "@openzeppelin/contracts/access/Ownable.sol:Ownable",
+          "@openzeppelin/contracts/utils/Context.sol:Context",
+          "contracts/Vault.sol:Base_Vault",
+          "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol:CCIPReceiver",
+          "@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/utils/introspection/IERC165.sol:IERC165",
+          "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IAny2EVMMessageReceiver.sol:IAny2EVMMessageReceiver"
+        ],
+        "libraries": [
+          "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol:SafeERC20",
+          "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol:Client"
+        ],
+        "methods": [
+          "()",
+          "()",
+          "depositToken(address,address,uint256)",
+          "withdrawTokens(address,uint256)",
+          "withdrawNative(address)",
+          "withdrawToken(address,address)",
+          "getLength(address)",
+          "changeMaster(address)"
+        ],
+        "linkReferences": [],
+        "errors": [
+          {
+            "kind": "constructor",
+            "contract": "Vault_CCIP",
+            "src": "contracts/Vault.sol:40"
+          },
+          {
+            "kind": "state-variable-immutable",
+            "name": "destinationChainSelector",
+            "src": "contracts/Vault.sol:29"
+          },
+          {
+            "kind": "state-variable-assignment",
+            "name": "router_ccip",
+            "src": "contracts/Vault.sol:32"
+          }
+        ],
+        "layout": {
+          "storage": [
+            {
+              "label": "_owner",
+              "offset": 0,
+              "slot": "0",
+              "type": "t_address",
+              "contract": "Ownable",
+              "src": "@openzeppelin/contracts/access/Ownable.sol:21"
+            },
+            {
+              "label": "master",
+              "offset": 0,
+              "slot": "1",
+              "type": "t_address",
+              "contract": "Vault_CCIP",
+              "src": "contracts/Vault.sol:31"
+            },
+            {
+              "label": "router_ccip",
+              "offset": 0,
+              "slot": "2",
+              "type": "t_address",
+              "contract": "Vault_CCIP",
+              "src": "contracts/Vault.sol:32"
+            },
+            {
+              "label": "myCrossChainTokens",
+              "offset": 0,
+              "slot": "3",
+              "type": "t_mapping(t_address,t_array(t_address)dyn_storage)",
+              "contract": "Vault_CCIP",
+              "src": "contracts/Vault.sol:34"
+            },
+            {
+              "label": "balance",
+              "offset": 0,
+              "slot": "4",
+              "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+              "contract": "Vault_CCIP",
+              "src": "contracts/Vault.sol:35"
+            },
+            {
+              "label": "tokenExist",
+              "offset": 0,
+              "slot": "5",
+              "type": "t_mapping(t_address,t_mapping(t_address,t_bool))",
+              "contract": "Vault_CCIP",
+              "src": "contracts/Vault.sol:36"
+            }
+          ],
+          "types": {
+            "t_address": {
+              "label": "address",
+              "numberOfBytes": "20"
+            },
+            "t_array(t_address)dyn_storage": {
+              "label": "address[]",
+              "numberOfBytes": "32"
+            },
+            "t_bool": {
+              "label": "bool",
+              "numberOfBytes": "1"
+            },
+            "t_mapping(t_address,t_array(t_address)dyn_storage)": {
+              "label": "mapping(address => address[])",
+              "numberOfBytes": "32"
+            },
+            "t_mapping(t_address,t_bool)": {
+              "label": "mapping(address => bool)",
+              "numberOfBytes": "32"
+            },
+            "t_mapping(t_address,t_mapping(t_address,t_bool))": {
+              "label": "mapping(address => mapping(address => bool))",
+              "numberOfBytes": "32"
+            },
+            "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+              "label": "mapping(address => mapping(address => uint256))",
+              "numberOfBytes": "32"
+            },
+            "t_mapping(t_address,t_uint256)": {
+              "label": "mapping(address => uint256)",
+              "numberOfBytes": "32"
+            },
+            "t_uint256": {
+              "label": "uint256",
+              "numberOfBytes": "32"
+            }
+          },
+          "layoutVersion": "1.2",
+          "flat": true,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      }
+    },
+    {
+      "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol:CCIPReceiver": {
+        "src": "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol:11",
+        "inherit": [
+          "@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/utils/introspection/IERC165.sol:IERC165",
+          "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IAny2EVMMessageReceiver.sol:IAny2EVMMessageReceiver"
+        ],
+        "libraries": [],
+        "methods": [
+          "supportsInterface(bytes4)",
+          "ccipReceive((bytes32,uint64,bytes,bytes,struct Client.EVMTokenAmount[]))",
+          "getRouter()"
+        ],
+        "linkReferences": [],
+        "errors": [
+          {
+            "kind": "constructor",
+            "contract": "CCIPReceiver",
+            "src": "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol:14"
+          },
+          {
+            "kind": "state-variable-immutable",
+            "name": "i_ccipRouter",
+            "src": "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol:12"
+          }
+        ],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IAny2EVMMessageReceiver.sol:IAny2EVMMessageReceiver": {
+        "src": "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IAny2EVMMessageReceiver.sol:8",
+        "inherit": [],
+        "libraries": [],
+        "methods": [
+          "ccipReceive((bytes32,uint64,bytes,bytes,struct Client.EVMTokenAmount[]))"
+        ],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IRouterClient.sol:IRouterClient": {
+        "src": "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IRouterClient.sol:6",
+        "inherit": [],
+        "libraries": [],
+        "methods": [
+          "isChainSupported(uint64)",
+          "getSupportedTokens(uint64)",
+          "getFee(uint64,(bytes,bytes,struct Client.EVMTokenAmount[],address,bytes))",
+          "ccipSend(uint64,(bytes,bytes,struct Client.EVMTokenAmount[],address,bytes))"
+        ],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol:Client": {
+        "src": "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol:5",
+        "version": {
+          "withMetadata": "eaa92b9ef94095e3d82116f55c8989ee8939d797066236cd61dbbc1575efd20c",
+          "withoutMetadata": "1d00a90355856fb2d00aac3cc3e121a643444832e08f1002248c4e37cdc9c8a7",
+          "linkedWithoutMetadata": "1d00a90355856fb2d00aac3cc3e121a643444832e08f1002248c4e37cdc9c8a7"
+        },
+        "inherit": [],
+        "libraries": [],
+        "methods": [],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/utils/introspection/IERC165.sol:IERC165": {
+        "src": "@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/utils/introspection/IERC165.sol:15",
+        "inherit": [],
+        "libraries": [],
+        "methods": [
+          "supportsInterface(bytes4)"
+        ],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
+      "@openzeppelin/contracts/access/Ownable.sol:Ownable": {
+        "src": "@openzeppelin/contracts/access/Ownable.sol:20",
+        "inherit": [
+          "@openzeppelin/contracts/utils/Context.sol:Context"
+        ],
+        "libraries": [],
+        "methods": [
+          "owner()",
+          "renounceOwnership()",
+          "transferOwnership(address)"
+        ],
+        "linkReferences": [],
+        "errors": [
+          {
+            "kind": "constructor",
+            "contract": "Ownable",
+            "src": "@openzeppelin/contracts/access/Ownable.sol:38"
+          }
+        ],
+        "layout": {
+          "storage": [
+            {
+              "label": "_owner",
+              "offset": 0,
+              "slot": "0",
+              "type": "t_address",
+              "contract": "Ownable",
+              "src": "@openzeppelin/contracts/access/Ownable.sol:21"
+            }
+          ],
+          "types": {
+            "t_address": {
+              "label": "address",
+              "numberOfBytes": "20"
+            }
+          },
+          "layoutVersion": "1.2",
+          "flat": true,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.24"
+      },
       "@openzeppelin/contracts/interfaces/draft-IERC6093.sol:IERC1155Errors": {
         "src": "@openzeppelin/contracts/interfaces/draft-IERC6093.sol:113",
         "inherit": [],
