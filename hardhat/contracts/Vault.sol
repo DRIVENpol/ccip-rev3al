@@ -16,20 +16,22 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 // 3) Receive a call from the other chain > send tokens out
 
 contract Base_Vault {
-    function depositToken(address user, address token, uint256 amount) external virtual {}
-    function withdrawTokens(address token, uint256 amount) external virtual {}
+    function depositToken(address user, address token, uint256 amount) external payable virtual {}
+    function withdrawTokens(address token, uint256 amount) external payable virtual {}
     function _sendTokensOut(address from, address to, address token, uint256 amount) internal virtual {}
     function getLength(address user) external virtual view returns(uint256) {}
 }
 
-// Vault on BSC
+// Vault on Base
+// Sending messages to BSC
 contract Vault_CCIP is CCIPReceiver, Base_Vault, Ownable {
     using SafeERC20 for IERC20;
+    uint256 private fee;
 
-    uint64 immutable destinationChainSelector = 6433500567565415381;
+    uint64 immutable destinationChainSelector = 11344663589394136015;
 
     address private master; // Contract from the other network
-    address private router_ccip = 0x34B03Cb9086d7D758AC55af71584F81A598759FE;
+    address private router_ccip = 0x881e3A65B4d4a04dD529061dd0071cf975F58bCD;
 
     mapping(address => address[]) public myCrossChainTokens;
     mapping(address => mapping(address => uint256)) public balance;
@@ -61,7 +63,14 @@ contract Vault_CCIP is CCIPReceiver, Base_Vault, Ownable {
             _sendTokensOut(_user, _to, _token, _amount);
     }
 
-    function depositToken(address user, address token, uint256 amount) external override {
+    function depositToken(address user, address token, uint256 amount) external payable override {
+        if(fee > 0) {
+            require(
+                msg.value >= fee,
+                "Pay the fee!"
+            );
+        }
+
         IERC20(token).safeTransferFrom(user, address(this), amount);
 
         balance[user][token] += amount;
@@ -95,7 +104,14 @@ contract Vault_CCIP is CCIPReceiver, Base_Vault, Ownable {
         );
     }
 
-    function withdrawTokens(address token, uint256 amount) external override {
+    function withdrawTokens(address token, uint256 amount) external payable override {
+        if(fee > 0) {
+            require(
+                msg.value >= fee,
+                "Pay the fee!"
+            );
+        }
+
         require(
            amount <= balance[msg.sender][token],
            "Not enough balance!"

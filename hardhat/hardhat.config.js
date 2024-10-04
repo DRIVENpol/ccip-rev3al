@@ -1,5 +1,6 @@
 require("@nomicfoundation/hardhat-toolbox");
 require('@openzeppelin/hardhat-upgrades');
+require("@nomicfoundation/hardhat-ethers");
 
 require('dotenv').config()
 
@@ -30,6 +31,10 @@ module.exports = {
     },
     polygon: {
       url: "https://polygon-rpc.com/",
+      accounts: [process.env.PRIVATE_KEY],
+    },
+    base: {
+      url: "https://mainnet.base.org",
       accounts: [process.env.PRIVATE_KEY],
     },
   },

@@ -16,9 +16,9 @@ const logos = [
         chainId: 56,
     },
     {
-        src: "https://cryptologos.cc/logos/avalanche-avax-logo.png?v=033",
-        alt: "Avalanche",
-        chainId: 43114,
+        src: "https://github.com/base-org/brand-kit/blob/main/logo/symbol/Base_Symbol_Blue.png?raw=true",
+        alt: "BASE",
+        chainId: 8453,
     },
 ];
 
@@ -36,7 +36,7 @@ export default function StepForm() {
 
     const amount = watch('amount');
     const CHAIN_IDS = {
-        43114: 'AVALANCHE',
+        8453: 'BASE',
         56: 'BSC',
     };
 

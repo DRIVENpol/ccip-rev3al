@@ -17,12 +17,12 @@ export default function MyAssets() {
 
     const chainOptions = [
         { label: 'All Chains', value: 'all' },
-        { label: 'Avalanche', value: 'avalanche' },
+        { label: 'Base', value: 'base' },
         { label: 'BSC', value: 'bsc' },
     ];
 
     const CHAIN_IDS = {
-        AVALANCHE: 43114,
+        BASE: 43114,
         BSC: 56,
     };
 
@@ -39,7 +39,7 @@ export default function MyAssets() {
     const fetchTokens = async () => {
         let chainsToFetch = [];
         if (selectedChain === 'all') {
-            chainsToFetch = ['BSC', 'AVALANCHE'];
+            chainsToFetch = ['BSC', 'BASE'];
         } else {
             chainsToFetch = [selectedChain.toUpperCase()];
         }

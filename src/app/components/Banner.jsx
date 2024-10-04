@@ -13,8 +13,8 @@ export default function Banner() {
         //     alt: "Polygon Logo",
         // },
         {
-            src: "https://cryptologos.cc/logos/avalanche-avax-logo.png?v=033",
-            alt: "Avalanche Logo",
+            src: "https://github.com/base-org/brand-kit/blob/main/logo/symbol/Base_Symbol_Blue.png?raw=true",
+            alt: "Base Logo",
         },
     ];
 

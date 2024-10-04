@@ -1,0 +1,9 @@
+BSC Deployments
+MasterModule#Master - 0x4bc8312BCDABbAdB8eB28e0b924f52D16D2C3FfD
+VaultModule#Vault_CCIP - 0xD4289eeCf309745EB8c719D59Aa0D0a8820a6011
+TokenLauncherModule#TokenLauncher - 0xa57ab6DdbF3C50bF904A35b68eE7DFDf183d682e
+
+Base Deployments
+MasterModule#Master - 0xF47D69FD7Acff9766B6A27bD76A8FfEEeC2b6880
+VaultModule#Vault_CCIP - 0xaD25F5F947783eb5dCfacFfCeA20B83F7aF4887B
+TokenLauncherModule#TokenLauncher - 0x1401B705fff79E8bFa6ac987d2e4a9cD5C980BB6

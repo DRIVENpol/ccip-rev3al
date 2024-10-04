@@ -15,21 +15,24 @@ import {CCIPReceiver} from "@chainlink/contracts-ccip/src/v0.8/ccip/applications
 // 2) Receive a call from the other chain > remove balance
 // 3) Call the other chain > send tokens out
 
-// Master On BSC
+// Master On Base
+// Receive messages from BSC
 contract Base_Master {
     function _depositToken(address user, address token, uint256 amount) internal virtual {}
     function _withdrawTokens(address user, address token, uint256 amount) internal virtual {}
-    function sendTokensOut(address to, address token, uint256 amount) external virtual {}
+    function sendTokensOut(address to, address token, uint256 amount) external payable virtual {}
     function getLength(address user) external virtual view returns(uint256) {}
 }
 
 contract Master is CCIPReceiver, Base_Master, Ownable {
     using SafeERC20 for IERC20;
 
-    uint64 immutable destinationChainSelector = 6433500567565415381; // AVALANCHE
+    uint256 private fee;
+
+    uint64 immutable destinationChainSelector = 11344663589394136015; // BSC
 
     address private vault; // Vault on the destination chain
-    address private router_ccip = 0x34B03Cb9086d7D758AC55af71584F81A598759FE;
+    address private router_ccip = 0x881e3A65B4d4a04dD529061dd0071cf975F58bCD;
 
     mapping(address => address[]) public myCrossChainTokens;
     mapping(address => mapping(address => uint256)) public balance;
@@ -86,11 +89,18 @@ contract Master is CCIPReceiver, Base_Master, Ownable {
         _checkBalanceAndRemove(user, token);
     }
 
-    function sendTokensOut(address to, address token, uint256 amount) external override {
+    function sendTokensOut(address to, address token, uint256 amount) external payable override {
         require(
            amount <= balance[msg.sender][token],
            "Not enough balance!"
         );
+
+        if(fee > 0) {
+            require(
+                msg.value >= fee,
+                "Pay the fee!"
+            );
+        }
 
         balance[msg.sender][token] -= amount;
 
@@ -121,6 +131,10 @@ contract Master is CCIPReceiver, Base_Master, Ownable {
 
     function setVault(address newVault) external onlyOwner {
         vault = newVault;
+    }
+
+    function setFee(uint256 newFee) external onlyOwner {
+        fee = newFee;
     }
 
     function withdrawNative(address beneficiary) external onlyOwner {

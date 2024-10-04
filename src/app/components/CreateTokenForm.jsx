@@ -18,8 +18,8 @@ export default function CreateTokenForm() {
 
   const contractAddress = chainId === 56
     ? TOKEN_LAUNCHER.BSC
-    : chainId === 43114
-    ? TOKEN_LAUNCHER.AVALANCHE
+    : chainId === 8453
+    ? TOKEN_LAUNCHER.BASE
     : null;
 
   const { data: transactionHash, writeContract, isPending, error: writeError } = useWriteContract();
@@ -30,7 +30,7 @@ export default function CreateTokenForm() {
     if (!contractAddress) {
       setToast({
         type: 'warning',
-        message: 'Unsupported network. Please switch to BSC or Avalanche.',
+        message: 'Unsupported network. Please switch to BSC or BASE.',
       });
       return;
     }

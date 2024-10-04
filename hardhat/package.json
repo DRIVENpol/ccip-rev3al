@@ -3,10 +3,10 @@
     "@chainlink/contracts": "^0.6.1",
     "@chainlink/contracts-ccip": "^1.4.0",
     "@chainlink/local": "github:smartcontractkit/chainlink-local",
-    "@nomicfoundation/hardhat-ethers": "^3.0.6",
+    "@nomicfoundation/hardhat-ethers": "^3.0.8",
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@openzeppelin/hardhat-upgrades": "^3.2.1",
-    "ethers": "^6.13.2",
+    "ethers": "^6.13.3",
     "hardhat": "^2.22.8"
   },
   "dependencies": {

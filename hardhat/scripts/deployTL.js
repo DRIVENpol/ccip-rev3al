@@ -1,4 +1,4 @@
-const MasterModule = require("../ignition/modules/Master");
+const MasterModule = require("../ignition/modules/MasterModule");
 
 async function main() {
   const { tl } = await hre.ignition.deploy(TokenLauncherModule);
