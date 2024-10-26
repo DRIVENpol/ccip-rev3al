@@ -22,12 +22,13 @@ export default function MyAssets() {
     ];
 
     const CHAIN_IDS = {
-        BASE: 43114,
+        BASE: 8453,
         BSC: 56,
     };
 
     useEffect(() => {
         if (isConnected) {
+            fetchTokens();
             const intervalId = setInterval(() => {
                 fetchTokens();
             }, 5000);
@@ -52,7 +53,7 @@ export default function MyAssets() {
             if (!tokenLauncherAddress || !_chainId) continue;
 
             const length = await fetchTokensLength(tokenLauncherAddress, _chainId);
-            console.log("Length: " , length);
+            console.log("Length: ", length);
 
             for (let i = 0; i < length; i++) {
                 const tokenDetails = await fetchTokenDetails(tokenLauncherAddress, _chainId, i);
@@ -66,29 +67,34 @@ export default function MyAssets() {
                         supply: tokenDetails[2].toString(),
                     });
                 }
-
             }
-     };
-     setTokens(fetchedTokens);
-    }
+        }
+        setTokens(fetchedTokens);
+    };
 
     const fetchTokensLength = async (tokenLauncherAddress, _chainId) => {
-        const result = await readContract(config, {
-            abi: TOKEN_LAUNCHER_ABI,
-            address: tokenLauncherAddress,
-            functionName: 'getTokensLength',
-            args: [address],
-            chainId: _chainId
-          });
-    
-          const length = Number(result);
+        try {
+            const result = await readContract({
+                ...config,
+                abi: TOKEN_LAUNCHER_ABI,
+                address: tokenLauncherAddress,
+                functionName: 'getTokensLength',
+                args: [address],
+                chainId: _chainId,
+            });
 
-          return(length);
+            const length = Number(result);
+            return length;
+        } catch (error) {
+            console.error(`Error fetching tokens length on chainId ${_chainId}:`, error);
+            return 0;
+        }
     };
 
     const fetchTokenDetails = async (tokenLauncherAddress, _chainId, index) => {
         try {
-            const result = await readContract(config, {
+            const result = await readContract({
+                ...config,
                 address: tokenLauncherAddress,
                 abi: TOKEN_LAUNCHER_ABI,
                 functionName: 'myTokens',
@@ -98,7 +104,7 @@ export default function MyAssets() {
             console.log("My tokens", result);
             return result;
         } catch (error) {
-            console.error(`Error fetching token details for index ${index} on chainId ${chainId}:`, error);
+            console.error(`Error fetching token details for index ${index} on chainId ${_chainId}:`, error);
             return null;
         }
     };
@@ -153,7 +159,7 @@ export default function MyAssets() {
             ) : error ? (
                 <div className="text-red-600">{error}</div>
             ) : (
-                activeTab === 'tokens' && (
+                activeTab === 'tokens' && tokens.length > 0 ? (
                     <div className="overflow-x-auto">
                         <table className="min-w-full bg-white rounded-2xl shadow-lg text-black">
                             <thead className="bg-gray-100">
@@ -178,6 +184,8 @@ export default function MyAssets() {
                             </tbody>
                         </table>
                     </div>
+                ) : (
+                    <div className="text-gray-600 text-center mt-4">No tokens found.</div>
                 )
             )}
 
