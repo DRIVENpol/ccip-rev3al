@@ -1,31 +1,38 @@
-// CreateTokenForm.js
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaPlus } from 'react-icons/fa';
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { TOKEN_LAUNCHER } from '@/settings';
 import TOKEN_LAUNCHER_ABI from '@/abis/tokenLauncher.json';
-import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
 import Toast from './Toast';
+import { config } from '../config'; 
+
+const chainIdToName = {
+  56: 'BSC',
+  8453: 'BASE',
+};
+
+const chainNameToChainId = {
+  BSC: 56,
+  BASE: 8453,
+};
 
 export default function CreateTokenForm() {
-  const { isConnected, chainId, address } = useAccount();
+  const { isConnected, address } = useAccount();
+  const chainId = useChainId();
+  const chainName = chainIdToName[chainId];
   const router = useRouter();
 
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const [toast, setToast] = React.useState(null);
+  const [toast, setToast] = useState(null);
+  const [isPending, setIsPending] = useState(false);
 
-  const contractAddress = chainId === 56
-    ? TOKEN_LAUNCHER.BSC
-    : chainId === 8453
-    ? TOKEN_LAUNCHER.BASE
-    : null;
+  const contractAddress = TOKEN_LAUNCHER[chainName];
 
-  const { data: transactionHash, writeContract, isPending, error: writeError } = useWriteContract();
-
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const { tokenName, tokenSymbol, supply } = data;
 
     if (!contractAddress) {
@@ -36,34 +43,61 @@ export default function CreateTokenForm() {
       return;
     }
 
-    writeContract({
-      address: contractAddress,
-      abi: TOKEN_LAUNCHER_ABI,
-      functionName: 'launchToken',
-      args: [tokenName, tokenSymbol, BigInt(supply), address],
-    });
-  };
+    try {
+      setIsPending(true);
 
-  const { isLoading: isConfirming, isSuccess: isConfirmed, error: receiptError } = useWaitForTransactionReceipt({
-    hash: transactionHash,
-  });
-
-  useEffect(() => {
-    if (isConfirmed) {
-      setToast({
-        type: 'success',
-        message: 'Your ERC20 token has been created successfully.',
+      const txHash = await writeContract(config, {
+        address: contractAddress,
+        abi: TOKEN_LAUNCHER_ABI,
+        functionName: 'launchToken',
+        args: [tokenName, tokenSymbol, BigInt(supply), address],
+        chainId: chainId,
       });
-      // Redirect after a short delay to allow users to read the success message
-      setTimeout(() => router.push('/my-tokens'), 3000);
-    } else if (writeError || receiptError) {
-      console.error(writeError?.message || receiptError?.message);
+
+      console.log('Transaction Hash:', txHash);
+
+      const receipt = await waitForTransactionReceipt(config, {
+        hash: txHash,
+        confirmations: 2,
+        pollingInterval: 1000,
+        onReplaced: (replacement) => {
+          console.log('Transaction was replaced:', replacement);
+          setToast({
+            type: 'warning',
+            message: `Transaction was replaced: ${replacement.transaction.hash}`,
+          });
+        },
+      });
+
+      console.log('Transaction Receipt:', receipt);
+      console.log('Transaction Status:', receipt.status, typeof receipt.status);
+
+      if (receipt.status === 1n || receipt.status === 'success') {
+        setToast({
+          type: 'success',
+          message: 'Your ERC20 token has been created successfully.',
+        });
+      } else if (receipt.status === 0n || receipt.status === 'fail') {
+        setToast({
+          type: 'error',
+          message: `Transaction failed: ${txHash}`,
+        });
+      } else {
+        setToast({
+          type: 'error',
+          message: `Unexpected transaction status: ${receipt.status}`,
+        });
+      }
+    } catch (error) {
+      console.error("Error creating token: ", error);
       setToast({
         type: 'error',
-        message: (writeError?.message || receiptError?.message)?.split('\n')[0] || 'An error occurred',
+        message: `Error creating token: ${error.message}`,
       });
+    } finally {
+      setIsPending(false);
     }
-  }, [isConfirmed, writeError, receiptError, router]);
+  };
 
   const closeToast = () => setToast(null);
 
@@ -94,7 +128,10 @@ export default function CreateTokenForm() {
           <input
             type="number"
             className="w-full p-2 border border-gray-300 rounded"
-            {...register('supply', { required: 'Total supply is required', min: { value: 1, message: 'Supply must be at least 1' } })}
+            {...register('supply', {
+              required: 'Total supply is required',
+              min: { value: 1, message: 'Supply must be at least 1' },
+            })}
           />
           {errors.supply && <span className="text-red-500 text-sm">{errors.supply.message}</span>}
         </div>
@@ -107,9 +144,9 @@ export default function CreateTokenForm() {
         <button
           type="submit"
           className="bg-blue-600 w-50 text-white py-2 px-4 rounded-lg text-lg flex items-center justify-center disabled:bg-gray-400"
-          disabled={isPending || isConfirming}
+          disabled={isPending}
         >
-          {isPending || isConfirming ? (
+          {isPending ? (
             <div role="status">
               <span>Loading...</span>
             </div>
