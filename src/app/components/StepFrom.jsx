@@ -310,7 +310,7 @@ export default function StepForm() {
                     <button
                         type="button"
                         onClick={depositTokens}
-                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 px-4 rounded-lg text-lg disabled:opacity-50"
+                        className="bg-blue-600 text-white py-2 px-4 rounded-lg text-lg disabled:opacity-50"
                         disabled={isDepositing}
                     >
                         {isDepositing ? (
