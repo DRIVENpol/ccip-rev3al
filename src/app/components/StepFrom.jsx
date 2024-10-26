@@ -8,6 +8,7 @@ import TOKEN_ABI from '@/abis/erc20.json';
 import VAULT_ABI from '@/abis/vault.json';
 import { TOKEN_LAUNCHER, VAULT } from '@/settings';
 import { config } from '../config';
+import { ethers } from 'ethers';
 
 const logos = [
     {
@@ -24,10 +25,14 @@ const logos = [
 
 export default function StepForm() {
     const { isConnected, address, chainId } = useAccount();
-    const { register, handleSubmit, watch } = useForm();
+    const { register, handleSubmit, watch, setValue } = useForm();
     const [tokens, setTokens] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    const [tokenBalanceRaw, setTokenBalanceRaw] = useState(BigInt(0));
+    const [tokenBalance, setTokenBalance] = useState('0');
+    const [tokenDecimals, setTokenDecimals] = useState(18);
     const [currentAllowance, setAllowance] = useState(BigInt(0));
     const [selectedTokenAddress, setSelectedTokenAddress] = useState('');
     const [isApproving, setIsApproving] = useState(false);
@@ -74,6 +79,7 @@ export default function StepForm() {
             }
 
             setTokens(fetchedTokens);
+            console.log("Fetched token: ", fetchTokens)
 
             if (fetchedTokens.length > 0) {
                 setSelectedTokenAddress(fetchedTokens[0].address);
@@ -90,15 +96,20 @@ export default function StepForm() {
     };
 
     const fetchTokensLength = async (tokenLauncherAddress, chainId) => {
-        const result = await readContract(config, {
-            abi: TOKEN_LAUNCHER_ABI,
-            address: tokenLauncherAddress,
-            functionName: 'getTokensLength',
-            args: [address],
-            chainId: chainId,
-        });
+        try {
+            const result = await readContract(config, {
+                abi: TOKEN_LAUNCHER_ABI,
+                address: tokenLauncherAddress,
+                functionName: 'getTokensLength',
+                args: [address],
+                chainId: chainId,
+            });
 
-        return Number(result);
+            return Number(result);
+        } catch (error) {
+            console.error(`Error fetching tokens length on chainId ${chainId}:`, error);
+            return 0;
+        }
     };
 
     const fetchTokenDetails = async (tokenLauncherAddress, chainId, index) => {
@@ -123,6 +134,53 @@ export default function StepForm() {
         }
     }, [chainId, isConnected]);
 
+    const fetchTokenBalance = async () => {
+        try {
+            if (!selectedTokenAddress) {
+                setTokenBalanceRaw(BigInt(0));
+                setTokenBalance('0');
+                setTokenDecimals(18);
+                return;
+            }
+
+            const decimalsResult = await readContract(config, {
+                abi: TOKEN_ABI,
+                address: selectedTokenAddress,
+                functionName: 'decimals',
+                chainId: chainId,
+            });
+            const decimals = Number(decimalsResult);
+            setTokenDecimals(decimals);
+
+            const balanceRaw = await readContract(config, {
+                abi: TOKEN_ABI,
+                address: selectedTokenAddress,
+                functionName: 'balanceOf',
+                args: [address],
+                chainId: chainId,
+            });
+
+            const balanceRawBigNumber = BigInt(balanceRaw);
+
+            const balanceFormatted = ethers.formatUnits(balanceRawBigNumber, decimals);
+
+            setTokenBalanceRaw(balanceRawBigNumber);
+            setTokenBalance(balanceFormatted);
+
+        } catch (error) {
+            console.error("Error fetching token balance: ", error);
+            setTokenBalanceRaw(BigInt(0));
+            setTokenBalance('0');
+            setTokenDecimals(18);
+        }
+    };
+
+    useEffect(() => {
+        if (isConnected) {
+            fetchTokenBalance();
+        }
+    }, [selectedTokenAddress, isConnected]);
+
     const fetchAllowance = async () => {
         try {
             if (!selectedTokenAddress) {
@@ -139,27 +197,32 @@ export default function StepForm() {
             });
 
             setAllowance(BigInt(result));
-            console.log("Allowance: ", BigInt(result));
+            console.log("Allowance: ", BigInt(result).toString());
         } catch (error) {
             console.log("Can't fetch allowance: ", error);
+            setAllowance(BigInt(0));
         }
     };
+
+    useEffect(() => {
+        fetchAllowance();
+    }, [selectedTokenAddress, amount, isConnected]);
 
     const giveAllowance = async () => {
         try {
             setIsApproving(true);
-            const amountToApprove = BigInt(amount) * BigInt(10 ** 18);
+            const amountToApprove = ethers.parseUnits(amount, tokenDecimals);
 
             console.log("Before approving --------");
             console.log(selectedTokenAddress);
             console.log(VAULT[CHAIN_IDS[chainId]]);
-            console.log(amountToApprove);
+            console.log(amountToApprove.toString());
 
             const tx = await writeContract(config, {
                 address: selectedTokenAddress,
                 abi: TOKEN_ABI,
                 functionName: 'approve',
-                args: [VAULT[CHAIN_IDS[chainId]], String(amountToApprove)],
+                args: [VAULT[CHAIN_IDS[chainId]], amountToApprove.toString()],
                 chainId: chainId,
             });
 
@@ -186,14 +249,15 @@ export default function StepForm() {
     const depositTokens = async () => {
         try {
             setIsDepositing(true);
-            const amountToDeposit = BigInt(amount) * BigInt(10 ** 18);
+            const amountToDeposit = ethers.parseUnits(amount, tokenDecimals);
             console.log("ADDR: ", selectedTokenAddress)
             console.log("SC: ", VAULT[CHAIN_IDS[chainId]])
+            console.log("Amount to deposit: ", amountToDeposit.toString());
             await writeContract(config, {
                 address: VAULT[CHAIN_IDS[chainId]],
                 abi: VAULT_ABI,
                 functionName: 'depositToken',
-                args: [address, selectedTokenAddress, String(amountToDeposit)],
+                args: [address, selectedTokenAddress, amountToDeposit.toString()],
                 chainId: chainId,
             });
 
@@ -205,13 +269,13 @@ export default function StepForm() {
         }
     };
 
-    useEffect(() => {
-        fetchAllowance();
-    }, [selectedTokenAddress, amount, isConnected]);
-
     const onSubmit = (data) => {
         console.log("Form Data: ", data);
     };
+
+    const requiredAmount = ethers.parseUnits(amount ? amount : '0', tokenDecimals);
+
+    const needsApproval = currentAllowance < requiredAmount;
 
     return (
         <div className="relative bg-white p-6 rounded-lg shadow-lg border border-blue-600">
@@ -272,11 +336,22 @@ export default function StepForm() {
                     {watch('tokenType') === 'erc20' ? (
                         <>
                             <label className="block text-blue-600 text-sm font-medium mb-2">Amount</label>
-                            <input
-                                type="number"
-                                {...register('amount')}
-                                className="w-full p-2 border border-gray-300 rounded"
-                            />
+                            <div className="flex">
+                                <input
+                                    type="number"
+                                    step="any"
+                                    {...register('amount')}
+                                    className="w-full p-2 border border-gray-300 rounded-l"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setValue('amount', tokenBalance)}
+                                    className="bg-blue-600 text-white py-2 px-4 rounded-r"
+                                >
+                                    Max
+                                </button>
+                            </div>
+                            <p className="text-sm text-gray-500 mt-1">Balance: {tokenBalance}</p>
                         </>
                     ) : (
                         <>
@@ -291,11 +366,11 @@ export default function StepForm() {
                 </div>
 
                 {/* Approve or Deposit */}
-                {currentAllowance < BigInt(amount ? amount : 0) * BigInt(10 ** 18) ? (
+                {needsApproval ? (
                     <button
                         type="button"
                         onClick={giveAllowance}
-                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 px-4 rounded-lg text-lg disabled:opacity-50"
+                        className="bg-blue-600 text-white py-2 px-4 rounded-lg text-lg disabled:opacity-50"
                         disabled={isApproving || isDepositing || isWaitingForApproval}
                     >
                         {isApproving || isWaitingForApproval ? (
