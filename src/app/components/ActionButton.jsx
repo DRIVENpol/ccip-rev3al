@@ -1,12 +1,13 @@
 'use client';
 import { useState } from 'react';
-import { FaPaperPlane } from 'react-icons/fa';
+import { FaPaperPlane, FaSpinner } from 'react-icons/fa';
 import { ethers } from 'ethers';
 
 export default function ActionButton({ token, chainName, handleWithdraw, handleSend }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toAddress, setToAddress] = useState('');
   const [amount, setAmount] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const isHomeChain = token.chain === chainName;
 
@@ -17,13 +18,18 @@ export default function ActionButton({ token, chainName, handleWithdraw, handleS
     setAmount('');
   };
 
-  const onSubmit = () => {
-    if (isHomeChain) {
-      handleWithdraw(token, amount);
-    } else {
-      handleSend(token, toAddress, amount);
+  const onSubmit = async () => {
+    setIsLoading(true);
+    try {
+      if (isHomeChain) {
+        await handleWithdraw(token, amount);
+      } else {
+        await handleSend(token, toAddress, amount);
+      }
+      closeModal();
+    } finally {
+      setIsLoading(false);
     }
-    closeModal();
   };
 
   return (
@@ -78,17 +84,22 @@ export default function ActionButton({ token, chainName, handleWithdraw, handleS
               <button
                 className="bg-gray-300 text-gray-700 py-2 px-4 rounded"
                 onClick={closeModal}
+                disabled={isLoading}
               >
                 Cancel
               </button>
               <button
-                className="bg-blue-600 text-white py-2 px-4 rounded"
+                className="bg-blue-600 text-white py-2 px-4 rounded flex items-center justify-center"
                 onClick={onSubmit}
                 disabled={
-                  (!isHomeChain && (!toAddress || !amount)) || (isHomeChain && !amount)
+                  isLoading ||
+                  (!isHomeChain && (!toAddress || !amount)) ||
+                  (isHomeChain && !amount)
                 }
               >
-                {isHomeChain ? 'Withdraw' : 'Send'}
+                {isLoading ? (
+                  <FaSpinner className="animate-spin" />
+                ) : isHomeChain ? 'Withdraw' : 'Send'}
               </button>
             </div>
           </div>

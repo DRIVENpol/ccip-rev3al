@@ -1,3 +1,4 @@
+// CreateTokenForm.js
 'use client';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -49,21 +50,22 @@ export default function CreateTokenForm() {
 
   useEffect(() => {
     if (isConfirmed) {
-    //   setToast({
-    //     type: 'success',
-    //     message: 'Your ERC20 token has been created successfully.',
-    //   });
-    //   setTimeout(() => router.push('/my-tokens'), 3000);
+      setToast({
+        type: 'success',
+        message: 'Your ERC20 token has been created successfully.',
+      });
+      // Redirect after a short delay to allow users to read the success message
+      setTimeout(() => router.push('/my-tokens'), 3000);
     } else if (writeError || receiptError) {
-        console.log(writeError?.message || receiptError?.message)
-        // setToast({
-        //     type: 'error',
-        //     message: (writeError?.message || receiptError?.message)?.split('\n')[0] || 'An error occurred',
-        //   });
+      console.error(writeError?.message || receiptError?.message);
+      setToast({
+        type: 'error',
+        message: (writeError?.message || receiptError?.message)?.split('\n')[0] || 'An error occurred',
+      });
     }
   }, [isConfirmed, writeError, receiptError, router]);
 
-//   const closeToast = () => setToast(null);
+  const closeToast = () => setToast(null);
 
   return (
     <div className="relative bg-white p-6 rounded-lg shadow-lg w-full h-full border border-blue-600">
@@ -92,16 +94,16 @@ export default function CreateTokenForm() {
           <input
             type="number"
             className="w-full p-2 border border-gray-300 rounded"
-            {...register('supply', { required: 'Total supply is required', min: 1 })}
+            {...register('supply', { required: 'Total supply is required', min: { value: 1, message: 'Supply must be at least 1' } })}
           />
           {errors.supply && <span className="text-red-500 text-sm">{errors.supply.message}</span>}
         </div>
         <div className="mb-8">
-                        <label className="block text-blue-600 text-sm font-medium mb-2">
-                            Select Home Chain
-                        </label>
-                        <w3m-network-button />
-                    </div>
+          <label className="block text-blue-600 text-sm font-medium mb-2">
+            Select Home Chain
+          </label>
+          <w3m-network-button />
+        </div>
         <button
           type="submit"
           className="bg-blue-600 w-50 text-white py-2 px-4 rounded-lg text-lg flex items-center justify-center disabled:bg-gray-400"
@@ -126,7 +128,7 @@ export default function CreateTokenForm() {
       )}
 
       {toast && (
-        <div className="fixed bottom-4 md:right-4 left-1/2 transform -translate-x-1/2 md:translate-x-0"> {/* Responsive toast positioning */}
+        <div className="fixed bottom-4 right-4 z-50">
           <Toast type={toast.type} message={toast.message} onClose={closeToast} />
         </div>
       )}

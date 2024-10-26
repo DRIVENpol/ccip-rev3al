@@ -1,9 +1,8 @@
-// MyCrosschainAssets.js
 'use client';
 import { useState, useEffect } from 'react';
 import { FaCoins, FaImage } from 'react-icons/fa';
 import { useAccount, useChainId } from 'wagmi';
-import { readContract, writeContract } from '@wagmi/core';
+import { readContract, writeContract, waitForTransactionReceipt } from '@wagmi/core';
 import { config } from '../config';
 import { MASTER, VAULT } from '@/settings';
 import VAULT_ABI from '@/abis/vault.json';
@@ -11,6 +10,7 @@ import MASTER_ABI from '@/abis/master.json';
 import ERC20_ABI from '@/abis/erc20.json';
 import { ethers } from 'ethers';
 import ActionButton from './ActionButton';
+import Toast from './Toast';
 
 const chainLogos = {
   'BSC': {
@@ -44,6 +44,7 @@ export default function MyCrosschainAssets() {
   const [baseLength, setBaseLength] = useState(0);
   const [bscTokens, setBscTokens] = useState([]);
   const [baseTokens, setBaseTokens] = useState([]);
+  const [toast, setToast] = useState(null);
 
   const { isConnected, address } = useAccount();
   const chainId = useChainId();
@@ -81,6 +82,10 @@ export default function MyCrosschainAssets() {
       return Number(result);
     } catch (error) {
       console.error(`Error fetching length for ${chain}: `, error);
+      setToast({
+        type: 'error',
+        message: `Error fetching length for ${chain}: ${error.message}`,
+      });
       return 0;
     }
   };
@@ -159,13 +164,19 @@ export default function MyCrosschainAssets() {
       return tokens;
     } catch (error) {
       console.error(`Error fetching tokens and balances for ${chain}: `, error);
+      setToast({
+        type: 'error',
+        message: `Error fetching tokens for ${chain}: ${error.message}`,
+      });
       return [];
     }
   };
 
   useEffect(() => {
-    if (isConnected) {
-      const fetchData = async () => {
+    if (!isConnected) return; 
+
+    const fetchData = async () => {
+      try {
         const bscLen = await fetchLength('BSC');
         setBscLength(bscLen);
 
@@ -177,10 +188,20 @@ export default function MyCrosschainAssets() {
 
         const baseToks = await fetchTokensAndBalances('BASE', baseLen);
         setBaseTokens(baseToks);
-      };
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setToast({
+          type: 'error',
+          message: `Error fetching data: ${error.message}`,
+        });
+      }
+    };
 
-      fetchData();
-    }
+    fetchData();
+
+    const intervalId = setInterval(fetchData, 5000);
+
+    return () => clearInterval(intervalId);
   }, [isConnected]);
 
   const handleWithdraw = async (token, amountStr) => {
@@ -191,7 +212,7 @@ export default function MyCrosschainAssets() {
     const tokenChainId = chainNameToChainId[token.chain];
 
     try {
-      await writeContract(config, {
+      const txHash = await writeContract(config, {
         address: vaultAddress,
         abi: VAULT_ABI,
         functionName: 'withdrawTokens',
@@ -200,16 +221,68 @@ export default function MyCrosschainAssets() {
         // Include fee if necessary
       });
 
-      if (token.chain === 'BSC') {
-        const bscToks = await fetchTokensAndBalances('BSC', bscLength);
-        setBscTokens(bscToks);
+      console.log('Transaction Hash:', txHash);
+
+      const receipt = await waitForTransactionReceipt(config, {
+        hash: txHash,
+        confirmations: 2,
+        pollingInterval: 1000,
+        onReplaced: (replacement) => {
+          console.log('Transaction was replaced:', replacement);
+          setToast({
+            type: 'warning',
+            message: `Transaction was replaced: ${replacement.transaction.hash}`,
+          });
+        },
+      });
+
+      console.log('Transaction Receipt:', receipt);
+      console.log('Transaction Status:', receipt.status, typeof receipt.status);
+
+      if (receipt.status === 1n || receipt.status === 'success') {
+        setToast({
+          type: 'success',
+          message: (
+            <>
+              Successfully withdrew {ethers.formatUnits(amount, token.decimals)} {token.symbol} from {token.chain}.<br />
+              You can track the transaction by accessing{' '}
+              <a
+                href={`https://www.${chainIdToName[chainId] == 'BASE' ? "basescan.org" : "bscscan.com"}/tx/${txHash}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline text-blue-600"
+              >
+                www.{chainIdToName[chainId] == 'BASE' ? "basescan.org" : "bscscan.com"}
+              </a>
+              .
+            </>
+          ),
+        });
+
+        if (token.chain === 'BSC') {
+          const bscToks = await fetchTokensAndBalances('BSC', bscLength);
+          setBscTokens(bscToks);
+        } else {
+          const baseToks = await fetchTokensAndBalances('BASE', baseLength);
+          setBaseTokens(baseToks);
+        }
+      } else if (receipt.status === 0n || receipt.status === 'fail') {
+        setToast({
+          type: 'error',
+          message: `Transaction failed: ${txHash}`,
+        });
       } else {
-        const baseToks = await fetchTokensAndBalances('BASE', baseLength);
-        setBaseTokens(baseToks);
+        setToast({
+          type: 'error',
+          message: `Unexpected transaction status: ${receipt.status}`,
+        });
       }
     } catch (error) {
       console.error("Error withdrawing tokens: ", error);
-      alert(`Error withdrawing tokens: ${error.message}`);
+      setToast({
+        type: 'error',
+        message: `Error withdrawing tokens: ${error.message}`,
+      });
     }
   };
 
@@ -222,7 +295,7 @@ export default function MyCrosschainAssets() {
     const tokenChainId = chainNameToChainId[token.chain];
 
     try {
-      await writeContract(config, {
+      const txHash = await writeContract(config, {
         address: masterAddress,
         abi: MASTER_ABI,
         functionName: 'sendTokensOut',
@@ -231,18 +304,74 @@ export default function MyCrosschainAssets() {
         // Include fee if necessary
       });
 
-      if (token.chain === 'BSC') {
-        const bscToks = await fetchTokensAndBalances('BSC', bscLength);
-        setBscTokens(bscToks);
+      console.log('Transaction Hash:', txHash);
+
+      const receipt = await waitForTransactionReceipt(config, {
+        hash: txHash,
+        confirmations: 2,
+        pollingInterval: 1000,
+        onReplaced: (replacement) => {
+          console.log('Transaction was replaced:', replacement);
+          setToast({
+            type: 'warning',
+            message: `Transaction was replaced: ${replacement.transaction.hash}`,
+          });
+        },
+      });
+
+      console.log('Transaction Receipt:', receipt);
+      console.log('Transaction Status:', receipt.status, typeof receipt.status);
+
+
+      if (receipt.status === 1n || receipt.status === 'success') {
+        setToast({
+          type: 'success',
+          message: (
+            <>
+              Successfully sent {ethers.formatUnits(amount, token.decimals)} {token.symbol} to {to}.<br />
+              The balance change will reflect after the crosschain transaction is finished, which can take up to 20 minutes.<br />
+              You can track it by accessing{' '}
+              <a
+                href={`https://ccip.chain.link/address/${address}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline text-blue-600"
+              >
+               ccip.chain.link
+              </a>
+              .
+            </>
+          ),
+        });
+
+        if (token.chain === 'BSC') {
+          const bscToks = await fetchTokensAndBalances('BSC', bscLength);
+          setBscTokens(bscToks);
+        } else {
+          const baseToks = await fetchTokensAndBalances('BASE', baseLength);
+          setBaseTokens(baseToks);
+        }
+      } else if (receipt.status === 0n) {
+        setToast({
+          type: 'error',
+          message: `Transaction failed: ${txHash}`,
+        });
       } else {
-        const baseToks = await fetchTokensAndBalances('BASE', baseLength);
-        setBaseTokens(baseToks);
+        setToast({
+          type: 'error',
+          message: `Unexpected transaction status: ${receipt.status}`,
+        });
       }
     } catch (error) {
       console.error("Error sending tokens: ", error);
-      alert(`Error sending tokens: ${error.message}`);
+      setToast({
+        type: 'error',
+        message: `Error sending tokens: ${error.message}`,
+      });
     }
   };
+
+  const closeToast = () => setToast(null);
 
   return (
     <div className="relative bg-white p-6 rounded-2xl shadow-lg border border-blue-600">
@@ -358,6 +487,12 @@ export default function MyCrosschainAssets() {
       {!isConnected && (
         <div className="absolute inset-0 bg-white bg-opacity-30 backdrop-blur-sm flex items-center justify-center rounded-2xl">
           Please connect your wallet!
+        </div>
+      )}
+
+      {toast && (
+        <div className="fixed bottom-4 right-4 z-50">
+          <Toast type={toast.type} message={toast.message} onClose={closeToast} />
         </div>
       )}
     </div>
