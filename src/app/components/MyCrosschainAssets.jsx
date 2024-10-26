@@ -1,7 +1,15 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaCoins, FaImage, FaPaperPlane } from 'react-icons/fa';
 import { useAccount } from 'wagmi';
+
+import { readContract } from '@wagmi/core';
+import { useChainId } from 'wagmi'
+
+import { config } from '../config';
+import { MASTER, VAULT } from '@/settings';
+import VAULT_ABI from '@/abis/vault.json';
+import { base } from 'viem/chains';
 
 const logos = [
     {
@@ -24,7 +32,128 @@ const logos = [
 
 export default function MyCrosschainAssets() {
     const [activeTab, setActiveTab] = useState('tokens');
-    const { isConnected } = useAccount();
+    const [bscLength, setBscLength] = useState();
+    const [baseLength, setBaseLength] = useState();
+    const [bscTokens, setBscTokens] = useState([]);
+    const [baseTokens, setBaseTokens] = useState([]);
+
+    const { isConnected, address } = useAccount();
+    const chain_id = useChainId();
+
+// Generalized function to fetch length
+const fetchLength = async (chain) => {
+  if (!address) {
+    console.log("No address connected");
+    return 0;
+  }
+
+  try {
+    const chainInfo = {
+      'BSC': {
+        address: VAULT.BSC,
+        chainId: 56,
+      },
+      'BASE': {
+        address: VAULT.BASE,
+        chainId: 8453,
+      }
+    };
+
+    const { address: vaultAddress, chainId } = chainInfo[chain];
+
+    const result = await readContract(config, {
+      abi: VAULT_ABI,
+      address: vaultAddress,
+      functionName: 'getLength',
+      args: [address],
+      chainId: chainId,
+    });
+
+    console.log(`fetchLength${chain}: `, result);
+    return Number(result);
+  } catch (error) {
+    console.error(`Error fetching length for ${chain}: `, error);
+    return 0;
+  }
+};
+
+// Generalized function to fetch tokens and balances
+const fetchTokensAndBalances = async (chain, length) => {
+  if (!address) {
+    console.log("No address connected");
+    return [];
+  }
+
+  try {
+    const chainInfo = {
+      'BSC': {
+        address: VAULT.BSC,
+        chainId: 56,
+      },
+      'BASE': {
+        address: VAULT.BASE,
+        chainId: 8453,
+      }
+    };
+
+    const { address: vaultAddress, chainId } = chainInfo[chain];
+
+    let tokens = [];
+
+    for (let i = 0; i < length; i++) {
+      // Fetch the token address at index i
+      const tokenAddress = await readContract(config, {
+        abi: VAULT_ABI,
+        address: vaultAddress,
+        functionName: 'myCrossChainTokens',
+        args: [address, i],
+        chainId: chainId,
+      });
+
+      // Fetch the balance for the token
+      const tokenBalance = await readContract(config, {
+        abi: VAULT_ABI,
+        address: vaultAddress,
+        functionName: 'balance',
+        args: [address, tokenAddress],
+        chainId: chainId,
+      });
+
+      tokens.push({
+        address: tokenAddress,
+        balance: tokenBalance.toString(), // Convert balance to string if it's a BigNumber
+      });
+    }
+
+    console.log(`${chain} Tokens with Balances: `, tokens);
+    return tokens;
+  } catch (error) {
+    console.error(`Error fetching tokens and balances for ${chain}: `, error);
+    return [];
+  }
+};
+
+// Use useEffect to fetch data
+useEffect(() => {
+  if (isConnected) {
+    const fetchData = async () => {
+      const bscLength = await fetchLength('BSC');
+      setBscLength(bscLength);
+
+      const baseLength = await fetchLength('BASE');
+      setBaseLength(baseLength);
+
+      const bscTokens = await fetchTokensAndBalances('BSC', bscLength);
+      setBscTokens(bscTokens);
+
+      const baseTokens = await fetchTokensAndBalances('BASE', baseLength);
+      setBaseTokens(baseTokens);
+    };
+
+    fetchData();
+  }
+}, [isConnected]);
+
 
     return (
         <div className="relative bg-white p-6 rounded-2xl shadow-lg border border-blue-600">
