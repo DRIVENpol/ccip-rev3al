@@ -1,14 +1,16 @@
+// MyCrosschainAssets.js
 'use client';
 import { useState, useEffect } from 'react';
-import { FaCoins, FaImage, FaPaperPlane } from 'react-icons/fa';
-import { useAccount } from 'wagmi';
-import { readContract } from '@wagmi/core';
-import { useChainId } from 'wagmi';
+import { FaCoins, FaImage } from 'react-icons/fa';
+import { useAccount, useChainId } from 'wagmi';
+import { readContract, writeContract } from '@wagmi/core';
 import { config } from '../config';
 import { MASTER, VAULT } from '@/settings';
 import VAULT_ABI from '@/abis/vault.json';
+import MASTER_ABI from '@/abis/master.json';
 import ERC20_ABI from '@/abis/erc20.json';
 import { ethers } from 'ethers';
+import ActionButton from './ActionButton';
 
 const chainLogos = {
   'BSC': {
@@ -19,6 +21,16 @@ const chainLogos = {
     src: "https://github.com/base-org/brand-kit/blob/main/logo/symbol/Base_Symbol_Blue.png?raw=true",
     alt: "Base Logo",
   },
+};
+
+const chainIdToName = {
+  56: 'BSC',
+  8453: 'BASE',
+};
+
+const chainNameToChainId = {
+  'BSC': 56,
+  'BASE': 8453,
 };
 
 const truncateAddress = (address) => {
@@ -34,6 +46,8 @@ export default function MyCrosschainAssets() {
   const [baseTokens, setBaseTokens] = useState([]);
 
   const { isConnected, address } = useAccount();
+  const chainId = useChainId();
+  const chainName = chainIdToName[chainId];
 
   const fetchLength = async (chain) => {
     if (!address) {
@@ -132,6 +146,7 @@ export default function MyCrosschainAssets() {
         ]);
 
         tokens.push({
+          chain: chain,
           address: tokenAddress,
           balance: tokenBalance.toString(),
           name: tokenName,
@@ -168,6 +183,67 @@ export default function MyCrosschainAssets() {
     }
   }, [isConnected]);
 
+  const handleWithdraw = async (token, amountStr) => {
+    if (!amountStr) return;
+    const amount = ethers.parseUnits(amountStr, token.decimals);
+
+    const vaultAddress = VAULT[token.chain];
+    const tokenChainId = chainNameToChainId[token.chain];
+
+    try {
+      await writeContract(config, {
+        address: vaultAddress,
+        abi: VAULT_ABI,
+        functionName: 'withdrawTokens',
+        args: [token.address, amount.toString()],
+        chainId: tokenChainId,
+        // Include fee if necessary
+      });
+
+      if (token.chain === 'BSC') {
+        const bscToks = await fetchTokensAndBalances('BSC', bscLength);
+        setBscTokens(bscToks);
+      } else {
+        const baseToks = await fetchTokensAndBalances('BASE', baseLength);
+        setBaseTokens(baseToks);
+      }
+    } catch (error) {
+      console.error("Error withdrawing tokens: ", error);
+      alert(`Error withdrawing tokens: ${error.message}`);
+    }
+  };
+
+  const handleSend = async (token, to, amountStr) => {
+    if (!to || !amountStr) return;
+
+    const amount = ethers.parseUnits(amountStr, token.decimals);
+
+    const masterAddress = MASTER[token.chain];
+    const tokenChainId = chainNameToChainId[token.chain];
+
+    try {
+      await writeContract(config, {
+        address: masterAddress,
+        abi: MASTER_ABI,
+        functionName: 'sendTokensOut',
+        args: [to, token.address, amount.toString()],
+        chainId: tokenChainId,
+        // Include fee if necessary
+      });
+
+      if (token.chain === 'BSC') {
+        const bscToks = await fetchTokensAndBalances('BSC', bscLength);
+        setBscTokens(bscToks);
+      } else {
+        const baseToks = await fetchTokensAndBalances('BASE', baseLength);
+        setBaseTokens(baseToks);
+      }
+    } catch (error) {
+      console.error("Error sending tokens: ", error);
+      alert(`Error sending tokens: ${error.message}`);
+    }
+  };
+
   return (
     <div className="relative bg-white p-6 rounded-2xl shadow-lg border border-blue-600">
       <h2 className="text-blue-600 text-2xl font-bold mb-6">My Crosschain Assets</h2>
@@ -199,7 +275,7 @@ export default function MyCrosschainAssets() {
                 <th className="text-left p-4 whitespace-nowrap">Home</th>
                 <th className="text-left p-4 whitespace-nowrap">Destination</th>
                 <th className="text-left p-4 whitespace-nowrap">Balance</th>
-                <th className="text-left p-4 whitespace-nowrap">Send</th>
+                <th className="text-left p-4 whitespace-nowrap">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -209,18 +285,29 @@ export default function MyCrosschainAssets() {
                   <td className="p-4 whitespace-nowrap">{token.name}</td>
                   <td className="p-4 whitespace-nowrap">{token.symbol}</td>
                   <td className="p-4 whitespace-nowrap">
-                    <img src={chainLogos['BSC'].src} alt={chainLogos['BSC'].alt} className="h-6 inline-block" />
+                    <img
+                      src={chainLogos['BSC'].src}
+                      alt={chainLogos['BSC'].alt}
+                      className="h-6 inline-block"
+                    />
                   </td>
                   <td className="p-4 whitespace-nowrap">
-                    <img src={chainLogos['BASE'].src} alt={chainLogos['BASE'].alt} className="h-6 inline-block" />
+                    <img
+                      src={chainLogos['BASE'].src}
+                      alt={chainLogos['BASE'].alt}
+                      className="h-6 inline-block"
+                    />
                   </td>
                   <td className="p-4 whitespace-nowrap">
                     {ethers.formatUnits(token.balance, token.decimals)}
                   </td>
                   <td className="p-4 whitespace-nowrap">
-                    <button className="bg-blue-600 text-white py-1 px-3 rounded-lg flex items-center">
-                      <FaPaperPlane className="mr-2" /> Send
-                    </button>
+                    <ActionButton
+                      token={token}
+                      chainName={chainName}
+                      handleWithdraw={handleWithdraw}
+                      handleSend={handleSend}
+                    />
                   </td>
                 </tr>
               ))}
@@ -230,18 +317,29 @@ export default function MyCrosschainAssets() {
                   <td className="p-4 whitespace-nowrap">{token.name}</td>
                   <td className="p-4 whitespace-nowrap">{token.symbol}</td>
                   <td className="p-4 whitespace-nowrap">
-                    <img src={chainLogos['BASE'].src} alt={chainLogos['BASE'].alt} className="h-6 inline-block" />
+                    <img
+                      src={chainLogos['BASE'].src}
+                      alt={chainLogos['BASE'].alt}
+                      className="h-6 inline-block"
+                    />
                   </td>
                   <td className="p-4 whitespace-nowrap">
-                    <img src={chainLogos['BSC'].src} alt={chainLogos['BSC'].alt} className="h-6 inline-block" />
+                    <img
+                      src={chainLogos['BSC'].src}
+                      alt={chainLogos['BSC'].alt}
+                      className="h-6 inline-block"
+                    />
                   </td>
                   <td className="p-4 whitespace-nowrap">
                     {ethers.formatUnits(token.balance, token.decimals)}
                   </td>
                   <td className="p-4 whitespace-nowrap">
-                    <button className="bg-blue-600 text-white py-1 px-3 rounded-lg flex items-center">
-                      <FaPaperPlane className="mr-2" /> Send
-                    </button>
+                    <ActionButton
+                      token={token}
+                      chainName={chainName}
+                      handleWithdraw={handleWithdraw}
+                      handleSend={handleSend}
+                    />
                   </td>
                 </tr>
               ))}
