@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import { useAccount } from 'wagmi';
 import NavbarLink from './NavbarLink';
 import Sidebar from './Sidebar';
 

@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaPlus } from 'react-icons/fa';
 import { useAccount, useChainId } from 'wagmi';
@@ -15,16 +15,10 @@ const chainIdToName = {
   8453: 'BASE',
 };
 
-const chainNameToChainId = {
-  BSC: 56,
-  BASE: 8453,
-};
-
 export default function CreateTokenForm() {
   const { isConnected, address } = useAccount();
   const chainId = useChainId();
   const chainName = chainIdToName[chainId];
-  const router = useRouter();
 
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [toast, setToast] = useState(null);

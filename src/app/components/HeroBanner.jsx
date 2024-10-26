@@ -1,7 +1,6 @@
 'use client'
 import HeroImage from "@/app/assets/ccip.png"
 
-import { useWeb3Modal } from '@web3modal/wagmi/react'
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 

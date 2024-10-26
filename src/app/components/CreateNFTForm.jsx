@@ -1,11 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { useAccount } from 'wagmi';
 
 export default function CreateNFTForm() {
-    const { isConnected } = useAccount();
-
     const [tokenName, setTokenName] = useState('');
     const [tokenSymbol, setTokenSymbol] = useState('');
     const [ipfsLink, setIpfsLink] = useState('');
