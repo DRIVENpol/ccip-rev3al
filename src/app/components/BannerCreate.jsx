@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 
 export default function BannerCreate() {
     return (
@@ -9,9 +10,11 @@ export default function BannerCreate() {
                     <p className="text-lg">Make it crosschain and control it from every chain you want.</p>
                 </div>
                 <div>
-                    <button className="bg-white text-blue-600 py-2 px-6 rounded-lg text-lg shadow-lg">
+                <Link href='/dashboard' className="mx-2 text-lg hover:text-blue-600">
+                    <button className="bg-white text-blue-600 py-2 px-6 rounded-lg text-lg shadow-lg" href="/dashboard">
                         Go Crosschain
                     </button>
+                    </Link>
                 </div>
             </div>
         </div>

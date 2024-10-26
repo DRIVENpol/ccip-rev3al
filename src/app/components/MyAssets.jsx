@@ -74,8 +74,7 @@ export default function MyAssets() {
 
     const fetchTokensLength = async (tokenLauncherAddress, _chainId) => {
         try {
-            const result = await readContract({
-                ...config,
+            const result = await readContract(config, {
                 abi: TOKEN_LAUNCHER_ABI,
                 address: tokenLauncherAddress,
                 functionName: 'getTokensLength',
@@ -93,8 +92,7 @@ export default function MyAssets() {
 
     const fetchTokenDetails = async (tokenLauncherAddress, _chainId, index) => {
         try {
-            const result = await readContract({
-                ...config,
+            const result = await readContract(config, {
                 address: tokenLauncherAddress,
                 abi: TOKEN_LAUNCHER_ABI,
                 functionName: 'myTokens',
