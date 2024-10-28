@@ -16,7 +16,7 @@ export default function Navbar() {
                 <div className="container mx-auto px-4 py-4 flex justify-between items-center">
                     <div className="flex items-center space-x-4">
                         <div className="font-bold" >
-                            <NavbarLink href="/">REV3AL Crosschain</NavbarLink>
+                            <NavbarLink href="/">REV3AL Interchain</NavbarLink>
                         </div>
                         <div className="hidden md:flex space-x-4">
                             <NavbarLink href="/">Home</NavbarLink>
@@ -45,7 +45,7 @@ export default function Navbar() {
                         <NavbarLink href="/create-token">Create Token</NavbarLink>
                         <NavbarLink href="/dashboard">Dashboard</NavbarLink>
                     </div>
-                    <div className="mt-auto">
+                    <div className="mt-auto md:hidden">
                         <w3m-button />
                     </div>
                 </div>
