@@ -153,7 +153,7 @@ contract Vault_CCIP is CCIPReceiver, Base_Vault, Ownable {
         );
 
         require(
-            amount <= balance[msg.sender][token],
+            amount <= balance[from][token],
             "Not enough balance!"
         );
 
